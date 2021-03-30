@@ -1,21 +1,42 @@
 import * as React from 'react';
 import Navbar from "./Navbar";
-import { IListing, getAllListings } from "../lib/database";
+import { IListing, getAllListings, getProductById } from "../lib/database";
 import Listing from "./Listing";
+import Product from "./Product";
 
-export default class App extends React.Component<{}, { listings: IListing[] }> {
-    constructor() {
-        super({});
+export default class App extends React.Component<{}, { listings: IListing[], product: JSX.Element }> {
+    constructor(props: {}) {
+        super(props);
 
         let listingsData = getAllListings();
-        this.state = { listings: listingsData || [] }
+        this.state = {
+            listings: listingsData || [],
+            product: null
+        }
+
+        this.renderProduct = this.renderProduct.bind(this);
+        this.clearProduct = this.clearProduct.bind(this);
+    }
+
+    renderProduct(id: number) {
+        let product = getProductById(id);
+
+        this.setState({
+            product: <Product data={product} clearProduct={this.clearProduct} />
+        })
+    }
+
+    clearProduct() {
+        this.setState({
+            product: null
+        })
     }
 
     render() {
         let listingsJSX: JSX.Element[] = [];
 
         listingsJSX = this.state.listings.map(l => {
-            return <Listing data={l} />
+            return <Listing data={l} renderProduct={this.renderProduct} key={l.id} />
         })
 
         return (
@@ -30,6 +51,7 @@ export default class App extends React.Component<{}, { listings: IListing[] }> {
                         {listingsJSX}
                     </div>
                 </div>
+                {this.state.product}
             </div>
         )
     }

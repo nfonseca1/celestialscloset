@@ -186,7 +186,7 @@ $height: 40vh;
     width: 20vw;
     height: $height;
     margin-top: 9vh;
-    z-index: 100;
+    z-index: 10;
     cursor: pointer;
 }
 
@@ -264,4 +264,81 @@ $height: 40vh;
     animation-duration: .15s;
     animation-fill-mode: forwards;
     animation-timing-function: cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+.Product-Container {
+    position: fixed;
+    z-index: 90;
+}
+.Product-Background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0,0,0,.6);
+    z-index: 100;
+}
+
+@keyframes expandProduct {
+    from {transform: scale(.25);}
+    to {transform: scale(1);}
+}
+
+.Product {
+    position: fixed;
+    width: 80vw;
+    height: 70vh;
+    top: 18vh;
+    left: 10vw;
+    background-color: $bg-color;
+    animation-name: expandProduct;
+    animation-duration: .15s;
+    animation-timing-function: ease-in-out;
+    animation-fill-mode: forwards;
+    z-index: 200;
+
+    .photo {
+        position: relative;
+        display: inline-block;
+        width: 30vw;
+        height: 100%;
+        background-color: #404040;
+        background-size: contain;
+        background-repeat: no-repeat;
+        background-position: center;
+
+        .arrow {
+            position: absolute;
+            height: 10%;
+            width: 10%;
+            top: 45%;
+            background-image: url('/assets/arrow.png');
+            background-size: cover;
+            background-position: center;
+            opacity: 0;
+            transition: opacity .2s;
+        }
+        .left {
+            left: 5%;
+        }
+
+        .right {
+            right: 5%;
+            transform: rotate(180deg);
+        }
+    }
+    .photo:hover {
+
+        .arrow {
+            opacity: 1;
+            background-color: none;
+            transition: opacity .2s, background-color .1s;
+        }
+        .arrow:hover {
+            cursor: pointer;
+            background-color: rgba(255,255,255,.15);
+            transition: background-color .1s;
+        }
+    }
 }

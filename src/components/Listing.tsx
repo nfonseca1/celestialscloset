@@ -5,6 +5,7 @@ import { IListing } from '../lib/database'
 
 interface Props {
     data: IListing
+    renderProduct: (id: number) => void
 }
 
 interface State {
@@ -98,7 +99,7 @@ export default class Listing extends React.Component<Props, State>  {
                     </div>
                     <div className={`thumbnail ${this.state.imageStyle}`} style={this.state.style}></div>
                 </div >
-                <div className="Listing-Collider" onMouseEnter={this.activate} onMouseLeave={this.deactivate}></div>
+                <div className="Listing-Collider" onMouseEnter={this.activate} onMouseLeave={this.deactivate} onClick={() => this.props.renderProduct(this.props.data.id)}></div>
             </div >
         )
     }
