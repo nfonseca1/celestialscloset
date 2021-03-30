@@ -23,12 +23,16 @@ export default class App extends React.Component<{}, { listings: IListing[], pro
 
         this.setState({
             product: <Product data={product} clearProduct={this.clearProduct} />
+        }, () => {
+            document.body.style.overflow = 'hidden';
         })
     }
 
     clearProduct() {
         this.setState({
             product: null
+        }, () => {
+            document.body.style.overflowY = 'scroll';
         })
     }
 

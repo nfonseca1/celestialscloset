@@ -41,6 +41,7 @@ const data = [
             link: 'https://scontent-bos3-1.cdninstagram.com/v/t51.2885-15/e35/p1080x1080/166653757_858535991544354_104385706680929035_n.jpg?tp=1&_nc_ht=scontent-bos3-1.cdninstagram.com&_nc_cat=106&_nc_ohc=nV6QJg3mAxQAX8lzK5j&ccb=7-4&oh=579dfd78cefaa5e8828b44cec3eb745a&oe=608A3FB2&_nc_sid=4f375e',
             crop: { x: 50, y: 25 }
         }]
+
     },
     {
         id: 2,

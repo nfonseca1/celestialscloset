@@ -51,6 +51,31 @@ export default class Product extends React.Component<Props, State> {
                         <div className="arrow left" onClick={() => this.togglePhoto(-1)}></div>
                         <div className="arrow right" onClick={() => this.togglePhoto(1)}></div>
                     </div>
+                    <div className="info">
+                        <div className="product-header">
+                            <div>{this.props.data.title}</div>
+                            <div>${this.props.data.price}</div>
+                        </div>
+                        <div className="description">
+                            {this.props.data.description}
+                        </div>
+                        <div className="details">
+                            <div className="detail">
+                                <div className="title">Stones</div>
+                                <div className="list-item">Aqua Aura Quartz</div>
+                            </div>
+                            <div className="detail">
+                                <div className="title">Chakras</div>
+                                <div className="list-item">Crown</div>
+                                <div className="list-item">Throat</div>
+                            </div>
+                            <div className="detail">
+                                <div className="title">Benefits</div>
+                                <div className="list-item">Anxiety Relief</div>
+                                <div className="list-item">Honesty</div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         )

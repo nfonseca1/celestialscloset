@@ -3,6 +3,17 @@ $title-color: #8240be;
 $main-font: 'Merienda One', cursive;
 $secondary-font: 'Courgette', cursive;
 
+%scroll {
+    overflow: scroll;
+    overflow-x: hidden;
+    &::-webkit-scrollbar {
+        width: 1px;
+    }
+    &::-webkit-scrollbar-thumb {
+        background-color: #b9b9b9;
+    }
+}
+
 * {
     margin: 0;
     padding: 0;
@@ -287,6 +298,8 @@ $height: 40vh;
 
 .Product {
     position: fixed;
+    display: flex;
+    justify-content: space-between;
     width: 80vw;
     height: 70vh;
     top: 18vh;
@@ -301,7 +314,7 @@ $height: 40vh;
     .photo {
         position: relative;
         display: inline-block;
-        width: 30vw;
+        width: 29vw;
         height: 100%;
         background-color: #404040;
         background-size: contain;
@@ -339,6 +352,65 @@ $height: 40vh;
             cursor: pointer;
             background-color: rgba(255,255,255,.15);
             transition: background-color .1s;
+        }
+    }
+
+    .info {
+        display: inline-flex;
+        flex-direction: column;
+        justify-content: space-between;
+        width: 50vw;
+        height: 100%;
+        padding: 2%;
+    }
+    
+    .product-header {
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+        font-family: $main-font;
+        font-size: 3vh;
+
+        div {
+            display: inline-block;
+        }
+    }
+
+    .description {
+        display: inline-block;
+        width: 100%;
+        height: 45%;
+        border-top: 1px solid darken($bg-color, 3%);
+        color: #202020;
+        font-size: 2vh;
+        padding-top: 3%;
+        @extend %scroll;
+    }
+
+    .details {
+        display: flex;
+        justify-content: space-between;
+        flex-wrap: nowrap;
+        height: 35%;
+        border-top: 1px solid darken($bg-color, 3%);
+        padding-top: 2%;
+        
+        .detail {
+            width: 30%;
+
+            .title {
+                text-align: center;
+                font-family: $main-font;
+                font-size: 2vh;
+                margin-bottom: 1vh;
+            }
+
+            .list-item {
+                text-align: center;
+                color: #202020;
+                font-size: 1.8vh;
+                margin-bottom: .5vh;
+            }
         }
     }
 }
