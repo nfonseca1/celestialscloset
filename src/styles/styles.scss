@@ -1,4 +1,4 @@
-$bg-color: #eee6e4;
+$bg-color: #f5f0ee;
 $title-color: #8240be;
 $main-font: 'Merienda One', cursive;
 $secondary-font: 'Courgette', cursive;
@@ -40,7 +40,7 @@ body {
             width: 100%;
             height: 100%;
             background: rgb(238,230,228);
-            background: linear-gradient(0deg, rgba(238,230,228,1) 0%, rgba(238,230,228,0.9699230033810399) 2%, rgba(238,230,228,0.9054972330729166) 5%, rgba(238,230,228,0.7290266448376226) 9%, rgba(238,230,228,0.4881302862942052) 12%, rgba(238,230,228,0.1491947120645133) 19%, rgba(238,230,228,0.09317230310092783) 25%, rgba(238,230,228,0.08757006220456931) 100%);
+            background: linear-gradient(0deg, rgba(245, 240, 238,1) 0%, rgba(245, 240, 238,0.9699230033810399) 2%, rgba(245, 240, 238,0.9054972330729166) 5%, rgba(245, 240, 238,0.72902664483726226) 9%, rgba(245, 240, 238,0.4881302862942052) 12%, rgba(245, 240, 238,0.1491947120645133) 19%, rgba(245, 240, 238,0.09317230310092783) 25%, rgba(245, 240, 238,0.08757006220456931) 100%);
         }
     }
 
@@ -61,20 +61,21 @@ body {
             width: 100%;
             height: auto;
             margin-top: 1vh;
-            margin-bottom: 10vh;
+            padding-bottom: 10vh;
         }
     }
 }
 
 .Navbar {
     position: fixed;
-    width: 68vw;
+    width: 80vw;
     height: 6vh;
     top: 2vh;
-    left: 17vw;
+    left: 10.75vw;
     padding-right: 5vw;
     background-color: darken($bg-color, 1%);
-    border-bottom: 1px solid darken($bg-color, 5%);
+    border: 1px solid darken($bg-color, 7%);
+    border-bottom: 2px solid darken($bg-color, 7%);
     border-radius: 0 1vh 1vh 0;
     z-index: 1000;
     // padding: 0 20% 0 20%;
@@ -85,7 +86,7 @@ body {
         left: -4vh;
         height: 8.5vh;
         width: 8.5vh;
-        background-color: $bg-color;
+        background-color: darken($bg-color, 7%);
         border-radius: 4.25vh;
     }
     .logo {
@@ -146,14 +147,16 @@ body {
     }
 }
 
+$height: 40vh;
+
 .Listing-Container {
     position: relative;
-    margin-top: 1vh;
+    margin-top: 3vh;
 }
 .Listing {
     position: absolute;
     width: 20vw;
-    min-height: 40vh;
+    min-height: $height;
     left: 0;
     height: auto;
     top: 2vh;
@@ -163,41 +166,49 @@ body {
         justify-content: space-between;
         font-family: $secondary-font;
         padding-bottom: 1vh;
+        height: 7vh;
+
+        div {
+            display: inline-flex;
+            flex-direction: column-reverse;
+        }
     }
 
     .thumbnail {
-        height: 38vh;
+        height: $height;
         background-repeat: no-repeat;
         background-size: cover;
+        box-shadow: 5px 8px 5px rgba(0,0,0,.25);
     }
 }
 .Listing-Collider {
     position: relative;
     width: 20vw;
-    height: 38vh;
-    margin-top: 6vh;
+    height: $height;
+    margin-top: 9vh;
     z-index: 100;
+    cursor: pointer;
 }
 
 @keyframes imageExpand {
     from {
         width: 20vw;
-        height: 38vh;
+        height: $height;
     }
     to {
         width: 24vw;
-        height: 42vh;
+        height: $height + 2vh;
     } 
 }
 
 @keyframes imageShrink {
     to {
         width: 20vw;
-        height: 38vh;
+        height: $height;
     }
     from {
         width: 24vw;
-        height: 42vh;
+        height: $height + 2vh;
     } 
 }
 
@@ -210,7 +221,7 @@ body {
     from {
         width: 24vw;
         left: -2vw;
-        top: 0vh;
+        top: 1vh;
     }
 }
 
@@ -223,30 +234,34 @@ body {
     to {
         width: 24vw;
         left: -2vw;
-        top: 0vh;
+        top: 1vh;
     }
 }
 
 .expandImage {
     animation-name: imageExpand;
-    animation-duration: .1s;
+    animation-duration: .15s;
     animation-fill-mode: forwards;
+    animation-timing-function: cubic-bezier(0.165, 0.84, 0.44, 1);
 }
 
 .shrinkImage {
     animation-name: imageShrink;
-    animation-duration: .1s;
+    animation-duration: .15s;
     animation-fill-mode: forwards;
+    animation-timing-function: cubic-bezier(0.165, 0.84, 0.44, 1);
 }
 
 .expandListing {
     animation-name: listingExpand;
-    animation-duration: .1s;
+    animation-duration: .15s;
     animation-fill-mode: forwards;
+    animation-timing-function: cubic-bezier(0.165, 0.84, 0.44, 1);
 }
 
 .shrinkListing {
     animation-name: listingShrink;
-    animation-duration: .1s;
+    animation-duration: .15s;
     animation-fill-mode: forwards;
+    animation-timing-function: cubic-bezier(0.165, 0.84, 0.44, 1);
 }

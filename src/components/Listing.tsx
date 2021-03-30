@@ -18,10 +18,14 @@ interface State {
 }
 
 export default class Listing extends React.Component<Props, State>  {
+    startImage: string = `url(${this.props.data.photos[0].link})`;
     startImagePos = {
         x: this.props.data.photos[0]?.crop?.x || 0,
         y: this.props.data.photos[0]?.crop?.y || 0
     }
+
+    //imageFlipInterval: NodeJS.Timeout = null;
+    //currentImageIdx = 0;
 
     constructor(props: Props) {
         super(props)
@@ -30,7 +34,7 @@ export default class Listing extends React.Component<Props, State>  {
             imageStyle: '',
             listingStyle: '',
             style: {
-                backgroundImage: `url(${this.props.data.photos[0].link})`,
+                backgroundImage: this.startImage,
                 backgroundPosition: `${this.startImagePos.x}% ${this.startImagePos.y}%`
             }
         }
@@ -46,15 +50,34 @@ export default class Listing extends React.Component<Props, State>  {
                 backgroundImage: state.style.backgroundImage,
                 backgroundPosition: state.style.backgroundPosition
             }
-        }))
+        }), () => {
+            //this.imageFlipInterval = setInterval(() => {
+            //    if (this.props.data.photos[this.currentImageIdx + 1]) {
+            //        this.currentImageIdx++;
+            //    }
+            //    else {
+            //        this.currentImageIdx = 0;
+            //    }
+
+            //    this.setState((state, props) => ({
+            //        style: {
+            //            backgroundImage: `url(${props.data.photos[this.currentImageIdx].link})`,
+            //            backgroundPosition: state.style.backgroundPosition
+            //        }
+            //    }))
+            //}, 750)
+        })
     }
 
     deactivate() {
+        //clearInterval(this.imageFlipInterval);
+        //this.currentImageIdx = 0;
+
         this.setState((state) => ({
             imageStyle: 'shrinkImage',
             listingStyle: 'shrinkListing',
             style: {
-                backgroundImage: state.style.backgroundImage,
+                backgroundImage: this.startImage,
                 backgroundPosition: state.style.backgroundPosition
             }
         }))

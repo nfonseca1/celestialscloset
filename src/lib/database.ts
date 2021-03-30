@@ -19,7 +19,7 @@ export function getAllListings(): IListing[] {
             price: 8,
             photos: [{
                 link: 'https://scontent-bos3-1.cdninstagram.com/v/t51.2885-15/e35/p1080x1080/166653757_858535991544354_104385706680929035_n.jpg?tp=1&_nc_ht=scontent-bos3-1.cdninstagram.com&_nc_cat=106&_nc_ohc=nV6QJg3mAxQAX8lzK5j&ccb=7-4&oh=579dfd78cefaa5e8828b44cec3eb745a&oe=608A3FB2&_nc_sid=4f375e',
-                crop: { x: 0, y: 25 }
+                crop: { x: 50, y: 25 }
             }]
         },
         {
@@ -28,11 +28,11 @@ export function getAllListings(): IListing[] {
             price: 7,
             photos: [{
                 link: 'https://scontent-bos3-1.cdninstagram.com/v/t51.2885-15/e35/p1080x1080/165742995_929059237896108_3118265944846753854_n.jpg?tp=1&_nc_ht=scontent-bos3-1.cdninstagram.com&_nc_cat=100&_nc_ohc=UC_-6-fvaNkAX_Uz3-Q&ccb=7-4&oh=77f7a73557fe1e683c75a7c3a01e18c6&oe=608A601B&_nc_sid=4f375e',
-                crop: { x: 0, y: 85 }
+                crop: { x: 100, y: 85 }
             },
             {
                 link: 'https://scontent-bos3-1.cdninstagram.com/v/t51.2885-15/e35/p1080x1080/165785772_1817448081792203_3589824587177032243_n.jpg?tp=1&_nc_ht=scontent-bos3-1.cdninstagram.com&_nc_cat=111&_nc_ohc=KqfYN2eyCbMAX-wgPkO&ccb=7-4&oh=0ed404bb2ef6928d9994c7d340e6f260&oe=608B7AF0&_nc_sid=4f375e',
-                crop: { x: 0, y: 100 }
+                crop: { x: 50, y: 100 }
             },
             ]
         },
@@ -42,7 +42,7 @@ export function getAllListings(): IListing[] {
             price: 12,
             photos: [{
                 link: 'https://scontent-bos3-1.cdninstagram.com/v/t51.2885-15/e35/p1080x1080/165447422_241753711008186_1257834783004277144_n.jpg?tp=1&_nc_ht=scontent-bos3-1.cdninstagram.com&_nc_cat=106&_nc_ohc=Hf3IuUXPMlAAX-m_Nnc&ccb=7-4&oh=08ebea2d25766c26d20d4b1eb8c09baf&oe=608C1FB9&_nc_sid=4f375e',
-                crop: { x: 0, y: 10 }
+                crop: { x: 50, y: 10 }
             },
             {
                 link: 'https://scontent-bos3-1.cdninstagram.com/v/t51.2885-15/e35/p1080x1080/165391678_2737612959789038_8852573143912705694_n.jpg?tp=1&_nc_ht=scontent-bos3-1.cdninstagram.com&_nc_cat=102&_nc_ohc=ya7mR37zJYEAX_TCSQe&ccb=7-4&oh=579ca6bf453d094390d95b243fdf037d&oe=608B3F2D&_nc_sid=4f375e'
@@ -57,7 +57,7 @@ export function getAllListings(): IListing[] {
             price: 10,
             photos: [{
                 link: 'https://scontent-bos3-1.cdninstagram.com/v/t51.2885-15/e35/p1080x1080/165597742_821408795254842_6332792994757587918_n.jpg?tp=1&_nc_ht=scontent-bos3-1.cdninstagram.com&_nc_cat=106&_nc_ohc=rQoIHpbZlxUAX9cJY8H&ccb=7-4&oh=916e8f2f78327ed5bfc0948d5df80e3d&oe=608CD29E&_nc_sid=4f375e',
-                crop: { x: 0, y: 10 }
+                crop: { x: 50, y: 10 }
 
             },
             {
@@ -70,11 +70,11 @@ export function getAllListings(): IListing[] {
             price: 10,
             photos: [{
                 link: 'https://scontent-bos3-1.cdninstagram.com/v/t51.2885-15/e35/p1080x1080/165237978_498299247875810_4945384809123738565_n.jpg?tp=1&_nc_ht=scontent-bos3-1.cdninstagram.com&_nc_cat=102&_nc_ohc=oXLlWl_sPjcAX9I8ndI&ccb=7-4&oh=686d95647f43feb8a26a64dc0f1d4640&oe=608C7C70&_nc_sid=4f375e',
-                crop: { x: 0, y: 100 }
+                crop: { x: 30, y: 100 }
             },
             {
                 link: 'https://scontent-bos3-1.cdninstagram.com/v/t51.2885-15/e35/p1080x1080/165330740_839795179937152_7298142602470413828_n.jpg?tp=1&_nc_ht=scontent-bos3-1.cdninstagram.com&_nc_cat=104&_nc_ohc=4_GT1L-8NxcAX_hjBeC&ccb=7-4&oh=547ca7327dc17072d8dc6cdf8b8be61d&oe=608C0151&_nc_sid=4f375e',
-                crop: { x: 0, y: 100 }
+                crop: { x: 50, y: 100 }
             }]
         },
         {
@@ -83,7 +83,7 @@ export function getAllListings(): IListing[] {
             price: 12,
             photos: [{
                 link: 'https://scontent-bos3-1.cdninstagram.com/v/t51.2885-15/e35/p1080x1080/165181667_1115945638922732_7099065110232039433_n.jpg?tp=1&_nc_ht=scontent-bos3-1.cdninstagram.com&_nc_cat=108&_nc_ohc=TmKXMvq2Km4AX-egE_t&ccb=7-4&oh=cbeff5efce781729c048c029b044395d&oe=608B98E2&_nc_sid=4f375e',
-                crop: { x: 0, y: 100 }
+                crop: { x: 50, y: 100 }
             },
             {
                 link: 'https://scontent-bos3-1.cdninstagram.com/v/t51.2885-15/e35/p1080x1080/164813892_346888776760981_1683883769890018351_n.jpg?tp=1&_nc_ht=scontent-bos3-1.cdninstagram.com&_nc_cat=101&_nc_ohc=Pwyddv7lf-cAX_VyOIK&ccb=7-4&oh=c381d720e07159ba0f590cb4f7ae54e4&oe=608BB3DD&_nc_sid=4f375e'
@@ -101,7 +101,7 @@ export function getAllListings(): IListing[] {
             price: 10,
             photos: [{
                 link: 'https://scontent-bos3-1.cdninstagram.com/v/t51.2885-15/e35/p1080x1080/166196764_1342999602743633_2074961832930189710_n.jpg?tp=1&_nc_ht=scontent-bos3-1.cdninstagram.com&_nc_cat=105&_nc_ohc=6PZuQsym1R4AX-GULvK&ccb=7-4&oh=a376b72835f131c9aef26698eaa630f6&oe=608DA1D7&_nc_sid=4f375e',
-                crop: { x: 0, y: 15 }
+                crop: { x: 50, y: 15 }
             },
             {
                 link: 'https://scontent-bos3-1.cdninstagram.com/v/t51.2885-15/e35/p1080x1080/165530622_443854543547272_4621298107297583528_n.jpg?tp=1&_nc_ht=scontent-bos3-1.cdninstagram.com&_nc_cat=104&_nc_ohc=JIRGiXr-tdgAX9LJHAw&ccb=7-4&oh=9bee18b92caef6224d2d9bf88a58d370&oe=608B9455&_nc_sid=4f375e'
@@ -116,7 +116,7 @@ export function getAllListings(): IListing[] {
             price: 11,
             photos: [{
                 link: 'https://scontent-bos3-1.cdninstagram.com/v/t51.2885-15/e35/p1080x1080/165306773_483407909456567_6351296638374428636_n.jpg?tp=1&_nc_ht=scontent-bos3-1.cdninstagram.com&_nc_cat=111&_nc_ohc=8E5GsLlPKXUAX_YFmtp&ccb=7-4&oh=9f0894dc84eaff9bb67554b33a698d2f&oe=608CF78B&_nc_sid=4f375e',
-                crop: { x: 0, y: 75 }
+                crop: { x: 50, y: 75 }
             },
             {
                 link: 'https://scontent-bos3-1.cdninstagram.com/v/t51.2885-15/e35/p1080x1080/165247476_498057781227347_5470345189005099720_n.jpg?tp=1&_nc_ht=scontent-bos3-1.cdninstagram.com&_nc_cat=111&_nc_ohc=maiqNKBKu2AAX_f_89r&ccb=7-4&oh=94ac3f50f6a16eff6b6361f37ccbee09&oe=608CDD55&_nc_sid=4f375e'
