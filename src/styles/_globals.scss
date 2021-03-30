@@ -1,0 +1,15 @@
+$bg-color: #f5f0ee;
+$title-color: #8240be;
+$main-font: 'Merienda One', cursive;
+$secondary-font: 'Courgette', cursive;
+
+%scroll {
+    overflow: scroll;
+    overflow-x: hidden;
+    &::-webkit-scrollbar {
+        width: 1px;
+    }
+    &::-webkit-scrollbar-thumb {
+        background-color: #a7a7a7;
+    }
+}

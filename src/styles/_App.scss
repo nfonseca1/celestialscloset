@@ -1,0 +1,61 @@
+@import 'globals';
+
+.App {
+    width: 100%;
+    height: 100%;
+
+    .background-header {
+        width: 100%;
+        height: 17.5vw;
+        background-image: url("assets/header.png");
+        background-repeat: no-repeat;
+        background-size: cover;
+
+        @media screen and (orientation: portrait) {
+            position: relative;
+            margin-top: 12vw;
+            margin-bottom: 2vh;
+        }
+
+        div {
+            width: 100%;
+            height: 100%;
+            background: rgb(238,230,228);
+            background: linear-gradient(0deg, rgba(245, 240, 238,1) 0%, rgba(245, 240, 238,0.9699230033810399) 2%, rgba(245, 240, 238,0.9054972330729166) 5%, rgba(245, 240, 238,0.72902664483726226) 9%, rgba(245, 240, 238,0.4881302862942052) 12%, rgba(245, 240, 238,0.1491947120645133) 19%, rgba(245, 240, 238,0.09317230310092783) 25%, rgba(245, 240, 238,0.08757006220456931) 100%);
+        
+            @media screen and (orientation: portrait) {
+                position: absolute;
+                top: .1vw;
+            }
+        }
+    }
+
+    .listings-section {
+        width: 100%;
+        padding: 0 15vw;
+
+        @media screen and (orientation: portrait) {
+            padding: 0 2vw;
+        }
+
+        h3 {
+            width: 100%;
+            text-align: center;
+            font-family: $main-font;
+
+            @media screen and (orientation: portrait) {
+                font-size: 4vw;
+            }
+        }
+
+        .listings {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            width: 100%;
+            height: auto;
+            margin-top: 1vh;
+            padding-bottom: 10vh;
+        }
+    }
+}

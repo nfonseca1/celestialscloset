@@ -1,0 +1,181 @@
+@import 'globals';
+
+
+.Product-Container {
+    position: fixed;
+    z-index: 90;
+}
+.Product-Background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0,0,0,.6);
+    z-index: 100;
+}
+
+@keyframes expandProduct {
+    from {transform: scale(.25);}
+    to {transform: scale(1);}
+}
+
+.Product {
+    position: fixed;
+    display: flex;
+    justify-content: space-between;
+    width: 80vw;
+    height: 70vh;
+    top: 18vh;
+    left: 10vw;
+    background-color: $bg-color;
+    animation-name: expandProduct;
+    animation-duration: .15s;
+    animation-timing-function: ease-in-out;
+    animation-fill-mode: forwards;
+    z-index: 200;
+
+    @media screen and (orientation: portrait) {
+        flex-direction: column;
+        width: 90vw;
+        height: 160vw;
+        left: 5vw;
+        top: 15vh;
+    }
+
+    .photo {
+        position: relative;
+        display: inline-block;
+        width: 29vw;
+        height: 100%;
+        background-color: #404040;
+        background-size: contain;
+        background-repeat: no-repeat;
+        background-position: center;
+
+        @media screen and (orientation: portrait) {
+            width: 100%;
+            height: 53vw;
+        }
+
+        .arrow {
+            position: absolute;
+            height: 10%;
+            width: 10%;
+            top: 45%;
+            background-image: url('/assets/arrow.png');
+            background-size: cover;
+            background-position: center;
+            opacity: 0;
+            transition: opacity .2s;
+
+            @media screen and (orientation: portrait) {
+                opacity: 1;
+                height: 18%;
+                width: 12%;
+                background-color: rgba(10,10,10,.1);
+            }
+        }
+        .left {
+            left: 5%;
+            @media screen and (orientation: portrait) {
+                left: 2%;
+            }
+        }
+
+        .right {
+            right: 5%;
+            transform: rotate(180deg);
+            @media screen and (orientation: portrait) {
+                right: 2%;
+            }
+        }
+    }
+    @media screen and (orientation: landscape) {
+        .photo:hover {
+            .arrow {
+                opacity: 1;
+                background-color: none;
+                transition: opacity .2s, background-color .1s;
+            }
+            .arrow:hover {
+                cursor: pointer;
+                background-color: rgba(255,255,255,.15);
+                transition: background-color .1s;
+            }
+        }
+    }
+
+    .info {
+        display: inline-flex;
+        flex-direction: column;
+        justify-content: space-between;
+        width: 50vw;
+        height: 100%;
+        padding: 2%;
+
+        @media screen and (orientation: portrait) {
+            width: 100%;
+            height: 106vw;
+            padding: 3%;
+        }
+    }
+    
+    .product-header {
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+        font-family: $main-font;
+        font-size: 3vh;
+
+        @media screen and (orientation: portrait) {
+            font-size: 4vw;
+        }
+
+        div {
+            display: inline-block;
+        }
+    }
+
+    .description {
+        display: inline-block;
+        width: 100%;
+        height: 45%;
+        border-top: 1px solid darken($bg-color, 3%);
+        color: #202020;
+        font-size: 2vh;
+        padding-top: 3%;
+        @extend %scroll;
+
+        @media screen and (orientation: portrait) {
+            padding: 2%;
+        }
+    }
+
+    .details {
+        display: flex;
+        justify-content: space-between;
+        flex-wrap: nowrap;
+        height: 35%;
+        border-top: 1px solid darken($bg-color, 3%);
+        padding-top: 2%;
+        
+        .detail {
+            width: 30%;
+
+            .title {
+                text-align: center;
+                font-family: $main-font;
+                font-size: 2vh;
+                margin-bottom: 1vh;
+            }
+
+            .list-item {
+                text-align: center;
+                color: #202020;
+                font-size: 1.8vh;
+                margin-bottom: .5vh;
+            }
+        }
+    }
+}

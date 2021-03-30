@@ -1,0 +1,128 @@
+@import 'globals';
+
+
+.Navbar {
+    position: fixed;
+    width: 80vw;
+    height: 6vh;
+    top: 2vh;
+    left: 10.75vw;
+    padding-right: 5vw;
+    background-color: darken($bg-color, 1%);
+    border: 1px solid darken($bg-color, 7%);
+    border-bottom: 2px solid darken($bg-color, 7%);
+    border-radius: 0 1vh 1vh 0;
+    z-index: 1000;
+    
+    @media screen and (orientation: portrait) {
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 12vw;
+        border-radius: 0;
+        padding-right: 3vw;
+    }
+
+    .logo-back {
+        position: absolute;
+        top: -1vh;
+        left: -4vh;
+        height: 8.5vh;
+        width: 8.5vh;
+        background-color: darken($bg-color, 7%);
+        border-radius: 4.25vh;
+
+        @media screen and (orientation: portrait) {
+            top: 0;
+            left: 0;
+            width: 12vw;
+            height: 12vw;
+            display: none;
+        }
+    }
+    .logo {
+        position: absolute;
+        top: -.75vh;
+        left: -4vh;
+        margin-left: .25vh;
+        height: 8vh;
+        width: 8vh;
+
+        @media screen and (orientation: portrait) {
+            top: 0;
+            left: 0;
+            width: 12vw;
+            height: 12vw;
+        }
+    }
+
+    .nav-container {
+        position: relative;
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+        height: 100%;
+
+        .company-name {
+            display: inline-flex;
+            flex-direction: column;
+            justify-content: center;
+            margin-left: 4vw;
+            font-size: 3.5vh;
+            font-family: $main-font;
+            color: $title-color;
+
+            @media screen and (orientation: portrait) {
+                font-size: 4vw;
+                margin-left: 15vw;
+            }
+        }
+
+        .nav-links {
+            display: inline-flex;
+            justify-content: space-between;
+            width: 17vw;
+
+            @media screen and (orientation: portrait) {
+                width: 41vw;
+            }
+        }
+
+        span, a {
+            display: inline-flex;
+            flex-direction: column;
+            justify-content: center;
+            height: 100%;
+            width: 14vh;
+            font-family: $secondary-font;
+            font-size: 2.5vh;
+            text-align: center;
+            transition: font-size .1s, color .15s;
+
+            @media screen and (orientation: portrait) {
+                width: 20vw;
+                font-size: 3.5vw;
+            }
+        }
+        span:hover {
+            cursor: pointer;
+            font-size: 2.6vh;
+            color: $title-color;
+            transition: font-size .1s, color .15s;
+
+            @media screen and (orientation: portrait) {
+                font-size: 4vw;
+            }
+        }
+        a:hover {
+            cursor: pointer;
+            font-size: 2.6vh;
+            color: $title-color;
+            transition: font-size .1s, color .15s;
+
+            @media screen and (orientation: portrait) {
+                font-size: 4vw;
+            }
+        }
+    }
+}

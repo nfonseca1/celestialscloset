@@ -1,0 +1,152 @@
+@import 'globals';
+
+
+$height: 40vh;
+$mobileHeight: 60vw;
+
+.Listing-Container {
+    position: relative;
+    margin-top: 3vh;
+
+    @media screen and (orientation: portrait) {
+        margin-top: 3vw;
+    }
+}
+.Listing {
+    position: absolute;
+    width: 20vw;
+    min-height: $height;
+    left: 0;
+    height: auto;
+    top: 2vh;
+
+    @media screen and (orientation: portrait) {
+        width: 46vw;
+        min-height: $mobileHeight;
+        top: 0;
+    }
+
+    .header {
+        display: flex;
+        justify-content: space-between;
+        font-family: $secondary-font;
+        padding-bottom: 1vh;
+        height: 7vh;
+
+        @media screen and (orientation: portrait) {
+            height: 9vw;
+            font-size: 3vw;
+            padding: 0 1vw 1.4vw 1vw;
+        }
+
+        div {
+            display: inline-flex;
+            flex-direction: column-reverse;
+        }
+    }
+
+    .thumbnail {
+        height: $height;
+        background-repeat: no-repeat;
+        background-size: cover;
+        box-shadow: 5px 8px 5px rgba(0,0,0,.25);
+
+        @media screen and (orientation: portrait) {
+            height: $mobileHeight;
+        }
+    }
+}
+.Listing-Collider {
+    position: relative;
+    width: 20vw;
+    height: $height;
+    margin-top: 9vh;
+    z-index: 10;
+    cursor: pointer;
+
+    @media screen and (orientation: portrait) {
+        width: 46vw;
+        height: $mobileHeight;
+        margin-top: 9vw;
+    }
+}
+
+@keyframes imageExpand {
+    from {
+        width: 20vw;
+        height: $height;
+    }
+    to {
+        width: 24vw;
+        height: $height + 2vh;
+    } 
+}
+
+@media screen and (orientation: landscape) {
+    @keyframes imageShrink {
+        to {
+            width: 20vw;
+            height: $height;
+        }
+        from {
+            width: 24vw;
+            height: $height + 2vh;
+        } 
+    }
+    
+    @keyframes listingShrink {
+        to {
+            width: 20vw;
+            left: 0vw;
+            top: 2vh;
+        }
+        from {
+            width: 24vw;
+            left: -2vw;
+            top: 1vh;
+        }
+    }
+    
+    @keyframes listingExpand {
+        from {
+            left: 0vw;
+            top: 2vh;
+            width: 20vw;
+        }
+        to {
+            width: 24vw;
+            left: -2vw;
+            top: 1vh;
+        }
+    }
+    
+    .expandImage {
+        animation-name: imageExpand;
+        animation-duration: .15s;
+        animation-fill-mode: forwards;
+        animation-timing-function: cubic-bezier(0.165, 0.84, 0.44, 1);
+    
+        
+    }
+    
+    .shrinkImage {
+        animation-name: imageShrink;
+        animation-duration: .15s;
+        animation-fill-mode: forwards;
+        animation-timing-function: cubic-bezier(0.165, 0.84, 0.44, 1);
+    }
+    
+    .expandListing {
+        animation-name: listingExpand;
+        animation-duration: .15s;
+        animation-fill-mode: forwards;
+        animation-timing-function: cubic-bezier(0.165, 0.84, 0.44, 1);
+    }
+    
+    .shrinkListing {
+        animation-name: listingShrink;
+        animation-duration: .15s;
+        animation-fill-mode: forwards;
+        animation-timing-function: cubic-bezier(0.165, 0.84, 0.44, 1);
+    }
+}
