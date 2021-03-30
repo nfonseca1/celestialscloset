@@ -60,7 +60,8 @@ body {
             flex-wrap: wrap;
             width: 100%;
             height: auto;
-            margin-bottom: 1vh;
+            margin-top: 1vh;
+            margin-bottom: 10vh;
         }
     }
 }
@@ -72,8 +73,10 @@ body {
     top: 2vh;
     left: 17vw;
     padding-right: 5vw;
-    background-color: $bg-color;
+    background-color: darken($bg-color, 1%);
+    border-bottom: 1px solid darken($bg-color, 5%);
     border-radius: 0 1vh 1vh 0;
+    z-index: 1000;
     // padding: 0 20% 0 20%;
 
     .logo-back {
@@ -143,10 +146,17 @@ body {
     }
 }
 
+.Listing-Container {
+    position: relative;
+    margin-top: 1vh;
+}
 .Listing {
+    position: absolute;
     width: 20vw;
+    min-height: 40vh;
+    left: 0;
     height: auto;
-    margin-top: 4vh;
+    top: 2vh;
 
     .header {
         display: flex;
@@ -160,4 +170,83 @@ body {
         background-repeat: no-repeat;
         background-size: cover;
     }
+}
+.Listing-Collider {
+    position: relative;
+    width: 20vw;
+    height: 38vh;
+    margin-top: 6vh;
+    z-index: 100;
+}
+
+@keyframes imageExpand {
+    from {
+        width: 20vw;
+        height: 38vh;
+    }
+    to {
+        width: 24vw;
+        height: 42vh;
+    } 
+}
+
+@keyframes imageShrink {
+    to {
+        width: 20vw;
+        height: 38vh;
+    }
+    from {
+        width: 24vw;
+        height: 42vh;
+    } 
+}
+
+@keyframes listingShrink {
+    to {
+        width: 20vw;
+        left: 0vw;
+        top: 2vh;
+    }
+    from {
+        width: 24vw;
+        left: -2vw;
+        top: 0vh;
+    }
+}
+
+@keyframes listingExpand {
+    from {
+        left: 0vw;
+        top: 2vh;
+        width: 20vw;
+    }
+    to {
+        width: 24vw;
+        left: -2vw;
+        top: 0vh;
+    }
+}
+
+.expandImage {
+    animation-name: imageExpand;
+    animation-duration: .1s;
+    animation-fill-mode: forwards;
+}
+
+.shrinkImage {
+    animation-name: imageShrink;
+    animation-duration: .1s;
+    animation-fill-mode: forwards;
+}
+
+.expandListing {
+    animation-name: listingExpand;
+    animation-duration: .1s;
+    animation-fill-mode: forwards;
+}
+
+.shrinkListing {
+    animation-name: listingShrink;
+    animation-duration: .1s;
+    animation-fill-mode: forwards;
 }
