@@ -1,0 +1,163 @@
+$bg-color: #eee6e4;
+$title-color: #8240be;
+$main-font: 'Merienda One', cursive;
+$secondary-font: 'Courgette', cursive;
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    text-decoration: none;
+}
+
+a {
+    color: black;
+}
+a:visited {
+    color: black;
+}
+
+body {
+    width: 100vw;
+    min-height: 120vh;
+    overflow-x: hidden;
+    background-color: $bg-color;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.App {
+    width: 100%;
+    height: 100%;
+
+    .background-header {
+        width: 100%;
+        height: 17.5vw;
+        background-image: url("assets/header.png");
+        background-repeat: no-repeat;
+        background-size: cover;
+
+        div {
+            width: 100%;
+            height: 100%;
+            background: rgb(238,230,228);
+            background: linear-gradient(0deg, rgba(238,230,228,1) 0%, rgba(238,230,228,0.9699230033810399) 2%, rgba(238,230,228,0.9054972330729166) 5%, rgba(238,230,228,0.7290266448376226) 9%, rgba(238,230,228,0.4881302862942052) 12%, rgba(238,230,228,0.1491947120645133) 19%, rgba(238,230,228,0.09317230310092783) 25%, rgba(238,230,228,0.08757006220456931) 100%);
+        }
+    }
+
+    .listings-section {
+        width: 100%;
+        padding: 0 15vw;
+
+        h3 {
+            width: 100%;
+            text-align: center;
+            font-family: $main-font;
+        }
+
+        .listings {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            width: 100%;
+            height: auto;
+            margin-bottom: 1vh;
+        }
+    }
+}
+
+.Navbar {
+    position: fixed;
+    width: 68vw;
+    height: 6vh;
+    top: 2vh;
+    left: 17vw;
+    padding-right: 5vw;
+    background-color: $bg-color;
+    border-radius: 0 1vh 1vh 0;
+    // padding: 0 20% 0 20%;
+
+    .logo-back {
+        position: absolute;
+        top: -1vh;
+        left: -4vh;
+        height: 8.5vh;
+        width: 8.5vh;
+        background-color: $bg-color;
+        border-radius: 4.25vh;
+    }
+    .logo {
+        position: absolute;
+        top: -.75vh;
+        left: -4vh;
+        margin-left: .25vh;
+        height: 8vh;
+        width: 8vh;
+    }
+
+    .nav-container {
+        position: relative;
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+        height: 100%;
+
+        .company-name {
+            display: inline-flex;
+            flex-direction: column;
+            justify-content: center;
+            margin-left: 4vw;
+            font-size: 3.5vh;
+            font-family: $main-font;
+            color: $title-color;
+        }
+
+        .nav-links {
+            display: inline-flex;
+            justify-content: space-between;
+            width: 17vw;
+        }
+
+        span, a {
+            display: inline-flex;
+            flex-direction: column;
+            justify-content: center;
+            height: 100%;
+            width: 14vh;
+            font-family: $secondary-font;
+            font-size: 2.5vh;
+            text-align: center;
+            transition: font-size .1s, color .15s;
+        }
+        span:hover {
+            cursor: pointer;
+            font-size: 2.6vh;
+            color: $title-color;
+            transition: font-size .1s, color .15s;
+        }
+        a:hover {
+            cursor: pointer;
+            font-size: 2.6vh;
+            color: $title-color;
+            transition: font-size .1s, color .15s;
+        }
+    }
+}
+
+.Listing {
+    width: 20vw;
+    height: auto;
+    margin-top: 4vh;
+
+    .header {
+        display: flex;
+        justify-content: space-between;
+        font-family: $secondary-font;
+        padding-bottom: 1vh;
+    }
+
+    .thumbnail {
+        height: 38vh;
+        background-repeat: no-repeat;
+        background-size: cover;
+    }
+}
