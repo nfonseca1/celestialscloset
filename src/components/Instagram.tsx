@@ -1,9 +1,11 @@
 import { Interface } from 'node:readline';
 import * as React from 'react';
 import { Link } from 'react-router-dom';
+import InstagramEmbed from 'react-instagram-embed';
 import Context from '../lib/Context';
 import { getAllInstagramPosts } from '../lib/database';
 
+// For running the instagram embed function through it's window property
 declare global {
     interface Window { instgrm: any }
 }
@@ -35,17 +37,22 @@ export default class Instagram extends React.Component<Props, { posts: string[] 
 
         let postJSX = this.state.posts.map(p => {
             return (
-                <div className="instagram-post" key={p}>
-                    <blockquote style={{ width: '100%' }} className="instagram-media" data-instgrm-permalink={`${p}?utm_source=ig_embed&amp;utm_campaign=loading`} data-instgrm-version="13"><a href={`${p}?utm_source=ig_embed&amp;utm_campaign=loading`}></a><a href={`${p}?utm_source=ig_embed&amp;utm_campaign=loading`} target="_blank"></a></blockquote>
-                    <script async src="https://www.instagram.com/embed.js"></script>
-                </div>
+                <InstagramEmbed
+                    url={p}
+                    clientAccessToken='2500377140256298|3627d468c26c71d49ecc47cfcfe0f5a5'
+                    maxWidth={1000}
+                    hideCaption={false}
+                    containerTagName='div'
+                    protocol=''
+                    injectScript
+                    onLoading={() => { }}
+                    onSuccess={() => { }}
+                    onAfterRender={() => { }}
+                    onFailure={() => { }}
+                    key={p}
+                />
             )
         })
-        setTimeout(() => {
-            if ('instgrm' in window) {
-                window.instgrm.Embeds.process()
-            }
-        }, 200);
 
         return (
             <div className='Instagram-Container'>
