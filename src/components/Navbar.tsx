@@ -35,7 +35,9 @@ export default class Navbar extends React.Component<{ context: Context }> {
                     {homeNavJSX}
                     <div className="nav-links">
                         {collectionNavJSX}
-                        <a href='https://www.instagram.com/celestials_closet/' target="_blank">Instagram</a>
+                        <Link to="/instagram">
+                            <span>Instagram</span>
+                        </Link>
                     </div>
                 </div>
             </div>

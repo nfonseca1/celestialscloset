@@ -13,6 +13,7 @@
     border-bottom: 2px solid darken($bg-color, 7%);
     border-radius: 0 1vh 1vh 0;
     z-index: 1000;
+    box-shadow: 6px 8px 5px rgba(0,0,0,.25);
     
     @media screen and (orientation: portrait) {
         top: 0;
@@ -29,7 +30,7 @@
         left: -4vh;
         height: 8.5vh;
         width: 8.5vh;
-        background-color: darken($bg-color, 7%);
+        background-color: #c0c0c0;
         border-radius: 4.25vh;
 
         @media screen and (orientation: portrait) {

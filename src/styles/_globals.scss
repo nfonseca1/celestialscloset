@@ -7,7 +7,7 @@ $secondary-font: 'Courgette', cursive;
     overflow: scroll;
     overflow-x: hidden;
     &::-webkit-scrollbar {
-        width: 1px;
+        width: 2px;
     }
     &::-webkit-scrollbar-thumb {
         background-color: #a7a7a7;

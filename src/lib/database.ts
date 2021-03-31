@@ -19,7 +19,7 @@ export interface IProduct extends IListing {
 }
 
 export function getAllListings(limit?: number): IListing[] {
-    return data.map(d => {
+    return listings.map(d => {
         return {
             id: d.id,
             title: d.title,
@@ -29,12 +29,16 @@ export function getAllListings(limit?: number): IListing[] {
     }).slice(0, limit);
 }
 
+export function getAllInstagramPosts(limit?: number): string[] {
+    return instagramPosts.slice(0, limit);
+}
+
 export function getProductById(id: number) {
-    return data.find(d => d.id === id);
+    return listings.find(d => d.id === id);
 }
 
 
-const data = [
+const listings = [
     {
         id: 1,
         title: 'Sunshine Aura Pendant',
@@ -182,4 +186,16 @@ const data = [
         chakras: ['Sacral', 'Root'],
         benefits: ['Energy Clearing', 'Shadow Work', 'Anxiety Relief']
     }
+]
+
+const instagramPosts = [
+    'https://www.instagram.com/p/CNBZa74Hkpi/',
+    'https://www.instagram.com/p/CM-kUnXnClE/',
+    'https://www.instagram.com/p/CM9-s1onpIv/',
+    'https://www.instagram.com/p/CM91AZ_nz03/',
+    'https://www.instagram.com/p/CM9yOJPHnt_/',
+    'https://www.instagram.com/p/CM9w7c-nOCa/',
+    'https://www.instagram.com/p/CM9vrRUHNQl/',
+    'https://www.instagram.com/p/CM8nOcCn-Fa/',
+    'https://www.instagram.com/p/CM8kVVonyV1/'
 ]

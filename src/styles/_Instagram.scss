@@ -1,0 +1,104 @@
+@import 'globals';
+
+
+.Instagram-Container {
+    position: fixed;
+    z-index: 1000;
+}
+.Instagram-Background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0,0,0,.8);
+    z-index: 1100;
+}
+
+@keyframes expandProduct {
+    from {transform: scale(.25);}
+    to {transform: scale(1);}
+}
+
+.Instagram {
+    position: fixed;
+    width: 44vw;
+    height: 94vh;
+    top: 3vh;
+    left: 28vw;
+    background-color: $bg-color;
+    animation-name: expandProduct;
+    animation-duration: .15s;
+    animation-timing-function: ease-in-out;
+    animation-fill-mode: forwards;
+    z-index: 1200;
+    @extend %scroll;
+    &::-webkit-scrollbar {
+        width: 5px;
+    }
+    padding: 2% 0;
+
+    @media screen and (orientation: portrait) {
+        flex-direction: column;
+        width: 90vw;
+        height: 86vh;
+        left: 5vw;
+        top: 7vh;
+    }
+
+    .header {
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        width: 100%;
+        text-align: center;
+
+        .title {
+            font-family: $main-font;
+            font-size: 3vh;
+
+            @media screen and (orientation: portrait) {
+                font-size: 2.5vh;
+            }
+        }
+    
+        .insta-button {
+            display: inline;
+            padding: 1vh;
+            font-size: 2vh;
+            color: white;
+            background-color: darken($title-color, 5%);
+            border-radius: 5px;
+            margin: 3%;
+            transition: background-color .1s;
+
+            a {
+                color: white;
+            }
+        }
+        .insta-button:hover {
+            background-color: lighten($title-color, 1%);
+            transition: background-color .1s;
+            cursor: pointer;
+        }
+    }
+
+    .posts {
+        margin-top: 2%;
+        display: flex;
+        justify-content: center;
+        width: 100%;
+
+        .post-container {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            width: 55%;
+
+            @media screen and (orientation: portrait) {
+                width: 90%;
+            }
+        }
+    }
+    
+}

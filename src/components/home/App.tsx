@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import Navbar from "../Navbar";
 import Home from "./Home";
 import Product from "../Product";
+import Instagram from "../Instagram";
 
 export default class App extends React.Component<{}> {
     constructor(props: {}) {
@@ -28,6 +29,11 @@ export default class App extends React.Component<{}> {
                                 </div>
                             )}
                         />
+                        <Route path="/instagram">
+                            <Navbar context={'Collection'} />
+                            <Home />
+                            <Instagram context={'Home'} />
+                        </Route>
                     </Switch>
                 </Router>
                 <div className="footer">&copy; 2021 Nathan Fonseca</div>
