@@ -67,10 +67,13 @@
             display: inline-flex;
             flex-direction: column;
             justify-content: center;
+            width: 50vw;
+            text-align: left;
             margin-left: 4vw;
             font-size: 3.5vh;
             font-family: $main-font;
             color: $title-color;
+            cursor: pointer;
 
             @media screen and (orientation: portrait) {
                 font-size: 4vw;

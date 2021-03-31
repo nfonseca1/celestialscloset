@@ -18,7 +18,7 @@ export interface IProduct extends IListing {
     benefits: string[]
 }
 
-export function getAllListings(): IListing[] {
+export function getAllListings(limit?: number): IListing[] {
     return data.map(d => {
         return {
             id: d.id,
@@ -26,7 +26,7 @@ export function getAllListings(): IListing[] {
             price: d.price,
             photos: d.photos
         }
-    })
+    }).slice(0, limit);
 }
 
 export function getProductById(id: number) {

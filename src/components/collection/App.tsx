@@ -1,8 +1,8 @@
 import * as React from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
-import Navbar from "./Navbar";
-import Home from "./Home";
-import Product from "./Product";
+import Navbar from "../Navbar";
+import Product from "../Product";
+import Collection from "./Collection";
 
 export default class App extends React.Component<{}> {
     constructor(props: {}) {
@@ -14,22 +14,23 @@ export default class App extends React.Component<{}> {
             <div className="App">
                 <Router>
                     <Switch>
-                        <Route exact path="/">
-                            <Navbar />
-                            <Home />
+                        <Route path="/collection">
+                            <Navbar context={'Collection'} />
+                            <Collection />
                         </Route>
                         <Route
                             path="/p/:id"
                             render={routeProps => (
                                 <div>
-                                    <Navbar />
-                                    <Home />
-                                    <Product match={routeProps.match} />
+                                    <Navbar context={'Collection'} />
+                                    <Collection />
+                                    <Product {...routeProps} context={'Collection'} />
                                 </div>
                             )}
                         />
                     </Switch>
                 </Router>
+                <div className="footer">&copy; 2021 Nathan Fonseca</div>
             </div>
         )
     }

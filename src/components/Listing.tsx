@@ -1,7 +1,5 @@
-import { readlink } from 'fs/promises';
-import { url } from 'node:inspector';
 import * as React from 'react';
-import { BrowserRouter as Router, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { IListing } from '../lib/database'
 
 interface Props {

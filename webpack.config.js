@@ -2,11 +2,14 @@ const path = require("path");
 const HTMLWebpackPlugin = require("html-webpack-plugin");
 
 module.exports = {
-    mode: "production",
-    entry: "./src/index.tsx",
+    mode: "development",
+    entry: {
+        home: "./src/home.tsx",
+        collection: "./src/collection.tsx"
+    },
     output: {
         path: path.resolve(__dirname, "dist"),
-        filename: "main.js",
+        filename: "[name].bundle.js",
         publicPath: '/'
     },
     resolve: {
@@ -51,13 +54,23 @@ module.exports = {
         historyApiFallback: true,
         contentBase: path.join(__dirname, 'dist'),
         proxy: {
+            '/': 'http://localhost:3000/',
+            '/collection': 'http://localhost:3000/collection',
             '/api': 'http://localhost:3000/api'
         }
     },
     plugins: [
         new HTMLWebpackPlugin({
             inject: 'body',
-            template: 'index.html'
+            template: 'index.html',
+            filename: 'home.html',
+            chunks: ['home']
+        }),
+        new HTMLWebpackPlugin({
+            inject: 'body',
+            template: 'index.html',
+            filename: 'collection.html',
+            chunks: ['collection']
         })
     ]
 }

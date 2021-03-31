@@ -4,6 +4,10 @@
     width: 100%;
     height: 100%;
 
+    .Collection {
+        margin-top: 15vh;
+    }
+
     .background-header {
         width: 100%;
         height: 17.5vw;
@@ -57,5 +61,33 @@
             margin-top: 1vh;
             padding-bottom: 10vh;
         }
+    }
+
+    .more-link-container {
+        display: flex;
+        justify-content: center;
+    }
+    .more-link {
+        display: inline;
+        color: $title-color;
+        font-family: $main-font;
+        font-size: 3vh;
+        transition: font-size .1s, color .1s;
+    }
+    .more-link:hover {
+        font-size: 3.1vh;
+        color: lighten($title-color, 5%);
+        transition: font-size .1s, color .1s;
+    }
+
+    .footer {
+        width: 100%;
+        margin-top: 15vh;
+        padding-top: 1vh;
+        padding-bottom: 2vh;
+        text-align: center;
+        font-size: 1.5vh;
+        color: #707070;
+        border-top: 1px solid darken($bg-color, 5%);
     }
 }

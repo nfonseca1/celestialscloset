@@ -1,10 +1,16 @@
 import * as React from 'react';
-import { Link, match } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+import { match } from 'react-router';
+import { History, Location } from 'history';
 import { IProduct, getProductById } from '../lib/database';
 import Photo from './Photo';
+import Context from '../lib/Context';
 
 interface Props {
-    match: match<{ id: string }>
+    match: match<{ id: string }>,
+    location: Location,
+    history: History,
+    context: string
 }
 
 interface State {
@@ -76,13 +82,24 @@ export default class Product extends React.Component<Props, State> {
             return <div className="list-item" key={b}>{b}</div>
         })
 
+        let backJSX = (
+            <Link to='/'>
+                <div className="Product-Background"></div>
+            </Link>
+        )
+        if (this.props.context == "Collection") {
+            backJSX = (
+                <Link to='/collection'>
+                    <div className="Product-Background"></div>
+                </Link>
+            )
+        }
+
         let arrowDisplay = this.state.data.photos?.length > 1 ? { display: 'inline-block' } : { display: 'none' }
 
         return (
             <div className="Product-Container">
-                <Link to="/">
-                    <div className="Product-Background"></div>
-                </Link>
+                {backJSX}
                 <div className="Product">
                     <div className="photo" style={style}>
                         <div className="photo-collider" onClick={this.showFullPhoto}></div>

@@ -1,6 +1,7 @@
 import * as React from 'react';
-import Listing from './Listing';
-import { getAllListings, IListing } from '../lib/database';
+import { Link } from 'react-router-dom';
+import Listing from '../Listing';
+import { getAllListings, IListing } from '../../lib/database';
 
 interface State {
     listings: IListing[]
@@ -10,7 +11,7 @@ export default class Home extends React.Component<{}, State> {
     constructor(props: {}) {
         super(props);
 
-        let listingsData = getAllListings();
+        let listingsData = getAllListings(6);
         this.state = {
             listings: listingsData || []
         }
@@ -32,6 +33,11 @@ export default class Home extends React.Component<{}, State> {
                     <h3>Recent Releases 💎</h3>
                     <div className="listings">
                         {listingsJSX}
+                    </div>
+                    <div className="more-link-container">
+                        <a href="/collection">
+                            <div className="more-link">View All In Collection</div>
+                        </a>
                     </div>
                 </div>
             </div>

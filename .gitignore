@@ -1,6 +1,4 @@
 node_modules
 .vscode
-dist/main.*
-dist/main.*
-dist/styles.css
-dist/index.html
+dist/*
+!dist/assets/
