@@ -12,7 +12,10 @@ export interface IListing {
 }
 
 export interface IProduct extends IListing {
-    description: string
+    description: string,
+    stones: string[],
+    chakras: string[],
+    benefits: string[]
 }
 
 export function getAllListings(): IListing[] {
@@ -40,8 +43,10 @@ const data = [
         photos: [{
             link: 'https://scontent-bos3-1.cdninstagram.com/v/t51.2885-15/e35/p1080x1080/166653757_858535991544354_104385706680929035_n.jpg?tp=1&_nc_ht=scontent-bos3-1.cdninstagram.com&_nc_cat=106&_nc_ohc=nV6QJg3mAxQAX8lzK5j&ccb=7-4&oh=579dfd78cefaa5e8828b44cec3eb745a&oe=608A3FB2&_nc_sid=4f375e',
             crop: { x: 50, y: 25 }
-        }]
-
+        }],
+        stones: ['Sunshine Aura Quartz'],
+        chakras: ['Solar Plexus'],
+        benefits: ['Positivity', 'Joyfulness', 'Energetic']
     },
     {
         id: 2,
@@ -56,7 +61,10 @@ const data = [
             link: 'https://scontent-bos3-1.cdninstagram.com/v/t51.2885-15/e35/p1080x1080/165785772_1817448081792203_3589824587177032243_n.jpg?tp=1&_nc_ht=scontent-bos3-1.cdninstagram.com&_nc_cat=111&_nc_ohc=KqfYN2eyCbMAX-wgPkO&ccb=7-4&oh=0ed404bb2ef6928d9994c7d340e6f260&oe=608B7AF0&_nc_sid=4f375e',
             crop: { x: 50, y: 100 }
         },
-        ]
+        ],
+        stones: ['Angel Aura Quartz'],
+        chakras: ['Crown', 'Heart'],
+        benefits: ['Serenity', 'Mental Clarity']
     },
     {
         id: 3,
@@ -72,7 +80,10 @@ const data = [
         },
         {
             link: 'https://scontent-bos3-1.cdninstagram.com/v/t51.2885-15/e35/p1080x1080/165260618_914938882588712_5319791210302030460_n.jpg?tp=1&_nc_ht=scontent-bos3-1.cdninstagram.com&_nc_cat=108&_nc_ohc=ln5Fmv8T5WwAX8P9mWi&ccb=7-4&oh=e997b4e1f305210ee0973155abb81a94&oe=608C0B24&_nc_sid=4f375e',
-        }]
+        }],
+        stones: ['Sunshine Aura Quartz'],
+        chakras: ['Solar Plexus'],
+        benefits: ['Positivity', 'Joyfulness', 'Energetic']
     },
     {
         id: 4,
@@ -86,7 +97,10 @@ const data = [
         },
         {
             link: 'https://scontent-bos3-1.cdninstagram.com/v/t51.2885-15/e35/p1080x1080/165298591_460550268697260_1368507050663560172_n.jpg?tp=1&_nc_ht=scontent-bos3-1.cdninstagram.com&_nc_cat=100&_nc_ohc=U_pjAUIurZcAX-FhTWW&ccb=7-4&oh=444b233175bf7f0df97ce7609f547113&oe=608A686C&_nc_sid=4f375e'
-        }]
+        }],
+        stones: ['Rose Quartz', 'Citrine', 'Turquoise'],
+        chakras: ['Crown', 'Third Eye', 'Throat', 'Heart', 'Solar Plexus', 'Sacral'],
+        benefits: ['Confidence', 'Joyfulness', 'Creativity', 'Self Love']
     },
     {
         id: 5,
@@ -100,7 +114,10 @@ const data = [
         {
             link: 'https://scontent-bos3-1.cdninstagram.com/v/t51.2885-15/e35/p1080x1080/165330740_839795179937152_7298142602470413828_n.jpg?tp=1&_nc_ht=scontent-bos3-1.cdninstagram.com&_nc_cat=104&_nc_ohc=4_GT1L-8NxcAX_hjBeC&ccb=7-4&oh=547ca7327dc17072d8dc6cdf8b8be61d&oe=608C0151&_nc_sid=4f375e',
             crop: { x: 50, y: 100 }
-        }]
+        }],
+        stones: ['Spirit Quartz'],
+        chakras: ['Crown', 'Third Eye'],
+        benefits: ['Harmony', 'Spiritual Growth']
     },
     {
         id: 6,
@@ -119,7 +136,10 @@ const data = [
         },
         {
             link: 'https://scontent-bos3-1.cdninstagram.com/v/t51.2885-15/e35/p1080x1080/165677017_879633842610928_6297250392219775008_n.jpg?tp=1&_nc_ht=scontent-bos3-1.cdninstagram.com&_nc_cat=104&_nc_ohc=bwXu7d63Er0AX-_Bixw&ccb=7-4&oh=ccc575b6f73bb451940629b085b37be1&oe=608D3A9A&_nc_sid=4f375e'
-        }]
+        }],
+        stones: ['Pink Aura Quartz'],
+        chakras: ['Third Eye', 'Heart'],
+        benefits: ['Self Love', 'Healing', 'Spiritual Growth']
     },
     {
         id: 7,
@@ -135,7 +155,10 @@ const data = [
         },
         {
             link: 'https://scontent-bos3-1.cdninstagram.com/v/t51.2885-15/e35/p1080x1080/165222051_163235582320091_8543395598630114072_n.jpg?tp=1&_nc_ht=scontent-bos3-1.cdninstagram.com&_nc_cat=111&_nc_ohc=juSGkXLJ5UEAX_651hf&ccb=7-4&oh=b8ec420639a8f951eaa730d575c76251&oe=608BEF2B&_nc_sid=4f375e'
-        }]
+        }],
+        stones: ['Aqua Aura Quartz'],
+        chakras: ['Crown', 'Throat'],
+        benefits: ['Anxiety Relief', 'Honesty', 'Calmness']
     },
     {
         id: 8,
@@ -154,6 +177,9 @@ const data = [
         },
         {
             link: 'https://scontent-bos3-1.cdninstagram.com/v/t51.2885-15/e35/p1080x1080/164966148_274186684361786_8565842097071965462_n.jpg?tp=1&_nc_ht=scontent-bos3-1.cdninstagram.com&_nc_cat=102&_nc_ohc=vzcarPoHmI0AX-U3ssb&ccb=7-4&oh=9404376ffae599816870697786fe38cf&oe=608B78B6&_nc_sid=4f375e'
-        }]
+        }],
+        stones: ['Obsidian'],
+        chakras: ['Sacral', 'Root'],
+        benefits: ['Energy Clearing', 'Shadow Work', 'Anxiety Relief']
     }
 ]

@@ -3,26 +3,36 @@ import Navbar from "./Navbar";
 import { IListing, getAllListings, getProductById } from "../lib/database";
 import Listing from "./Listing";
 import Product from "./Product";
+import Photo from "./Photo";
 
-export default class App extends React.Component<{}, { listings: IListing[], product: JSX.Element }> {
+interface State {
+    listings: IListing[],
+    product: JSX.Element,
+    photo: JSX.Element
+}
+
+export default class App extends React.Component<{}, State> {
     constructor(props: {}) {
         super(props);
 
         let listingsData = getAllListings();
         this.state = {
             listings: listingsData || [],
-            product: null
+            product: null,
+            photo: null
         }
 
         this.renderProduct = this.renderProduct.bind(this);
         this.clearProduct = this.clearProduct.bind(this);
+        this.showFullPhoto = this.showFullPhoto.bind(this);
+        this.hideFullPhoto = this.hideFullPhoto.bind(this);
     }
 
     renderProduct(id: number) {
         let product = getProductById(id);
 
         this.setState({
-            product: <Product data={product} clearProduct={this.clearProduct} />
+            product: <Product data={product} clearProduct={this.clearProduct} showFullPhoto={this.showFullPhoto} />
         }, () => {
             document.body.style.overflow = 'hidden';
         })
@@ -33,6 +43,18 @@ export default class App extends React.Component<{}, { listings: IListing[], pro
             product: null
         }, () => {
             document.body.style.overflowY = 'scroll';
+        })
+    }
+
+    showFullPhoto(link: string) {
+        this.setState({
+            photo: <Photo link={link} hideFullPhoto={this.hideFullPhoto} />
+        })
+    }
+
+    hideFullPhoto() {
+        this.setState({
+            photo: null
         })
     }
 
@@ -56,6 +78,7 @@ export default class App extends React.Component<{}, { listings: IListing[], pro
                     </div>
                 </div>
                 {this.state.product}
+                {this.state.photo}
             </div>
         )
     }

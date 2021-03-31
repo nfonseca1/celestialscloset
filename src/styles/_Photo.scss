@@ -1,0 +1,38 @@
+@import 'globals';
+
+
+.Photo-Container {
+    position: fixed;
+    z-index: 2000;
+
+    .Photo-Background {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background-color: rgba(0,0,0,.8);
+        z-index: 2100;
+    }
+
+    .Photo {
+        position: fixed;
+        display: inline-block;
+        width: 56vw;
+        height: 80vh;
+        top: 12vh;
+        left: 22vw;
+        background-color: #404040;
+        background-size: contain;
+        background-position: center;
+        background-repeat: no-repeat;
+        z-index: 2200;
+
+        @media screen and (orientation: portrait) {
+            width: 96vw;
+            height: 96vw;
+            left: 2vw;
+            top: 28vh;
+        }
+    }
+}
