@@ -10,6 +10,7 @@ export default class Photo extends React.Component<Props> {
         super(props);
     }
     render() {
+
         return (
             <div className="Photo-Container">
                 <div className="Photo-Background" onClick={this.props.hideFullPhoto}></div>

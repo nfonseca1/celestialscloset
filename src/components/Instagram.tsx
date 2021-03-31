@@ -1,7 +1,12 @@
+import { Interface } from 'node:readline';
 import * as React from 'react';
 import { Link } from 'react-router-dom';
 import Context from '../lib/Context';
 import { getAllInstagramPosts } from '../lib/database';
+
+declare global {
+    interface Window { instgrm: any }
+}
 
 interface Props {
     context: Context
@@ -36,6 +41,11 @@ export default class Instagram extends React.Component<Props, { posts: string[] 
                 </div>
             )
         })
+        setTimeout(() => {
+            if ('instgrm' in window) {
+                window.instgrm.Embeds.process()
+            }
+        }, 200);
 
         return (
             <div className='Instagram-Container'>

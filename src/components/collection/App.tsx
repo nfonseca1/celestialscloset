@@ -4,10 +4,28 @@ import Navbar from "../Navbar";
 import Product from "../Product";
 import Collection from "./Collection";
 import Instagram from "../Instagram";
+import Photo from "../Photo";
 
-export default class App extends React.Component<{}> {
+export default class App extends React.Component<{}, { photo: JSX.Element }> {
     constructor(props: {}) {
         super(props);
+
+        this.state = { photo: null }
+
+        this.showFullPhoto = this.showFullPhoto.bind(this);
+        this.hideFullPhoto = this.hideFullPhoto.bind(this);
+    }
+
+    showFullPhoto(link: string) {
+        this.setState({
+            photo: <Photo link={link} hideFullPhoto={this.hideFullPhoto} />
+        })
+    }
+
+    hideFullPhoto() {
+        this.setState({
+            photo: null
+        })
     }
 
     render() {
@@ -25,7 +43,7 @@ export default class App extends React.Component<{}> {
                                 <div>
                                     <Navbar context={'Collection'} />
                                     <Collection />
-                                    <Product {...routeProps} context={'Collection'} />
+                                    <Product {...routeProps} context={'Collection'} showFullPhoto={this.showFullPhoto} />
                                 </div>
                             )}
                         />
@@ -36,6 +54,7 @@ export default class App extends React.Component<{}> {
                         </Route>
                     </Switch>
                 </Router>
+                {this.state.photo}
                 <div className="footer">&copy; 2021 Nathan Fonseca</div>
             </div>
         )

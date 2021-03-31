@@ -10,7 +10,8 @@ interface Props {
     match: match<{ id: string }>,
     location: Location,
     history: History,
-    context: string
+    context: string,
+    showFullPhoto: (link: string) => void
 }
 
 interface State {
@@ -27,9 +28,6 @@ export default class Product extends React.Component<Props, State> {
         this.state = { photoIdx: 0, data: product, photo: null }
 
         this.togglePhoto = this.togglePhoto.bind(this);
-
-        this.showFullPhoto = this.showFullPhoto.bind(this);
-        this.hideFullPhoto = this.hideFullPhoto.bind(this);
     }
 
     togglePhoto(dir: number = 1) {
@@ -49,18 +47,6 @@ export default class Product extends React.Component<Props, State> {
                 photoIdx: 0
             })
         }
-    }
-
-    showFullPhoto() {
-        this.setState({
-            photo: <Photo link={this.state.data.photos[this.state.photoIdx].link} hideFullPhoto={this.hideFullPhoto} />
-        })
-    }
-
-    hideFullPhoto() {
-        this.setState({
-            photo: null
-        })
     }
 
     render() {
@@ -102,7 +88,7 @@ export default class Product extends React.Component<Props, State> {
                 {backJSX}
                 <div className="Product">
                     <div className="photo" style={style}>
-                        <div className="photo-collider" onClick={this.showFullPhoto}></div>
+                        <div className="photo-collider" onClick={() => this.props.showFullPhoto(this.state.data.photos[this.state.photoIdx].link)}></div>
                         <div className="arrow left" onClick={() => this.togglePhoto(-1)} style={arrowDisplay}></div>
                         <div className="arrow right" onClick={() => this.togglePhoto(1)} style={arrowDisplay}></div>
                     </div>
