@@ -24,6 +24,7 @@ body {
     width: 100vw;
     min-height: 120vh;
     overflow-x: hidden;
+    overflow-y: scroll;
     background-color: $bg-color;
     font-family: Arial, Helvetica, sans-serif;
 }

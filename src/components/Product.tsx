@@ -1,35 +1,41 @@
 import * as React from 'react';
-import { IProduct } from '../lib/database'
+import { Link, match } from 'react-router-dom';
+import { IProduct, getProductById } from '../lib/database';
+import Photo from './Photo';
 
 interface Props {
-    data: IProduct,
-    clearProduct: () => void,
-    showFullPhoto: (link: string) => void;
+    match: match<{ id: string }>
 }
 
 interface State {
-    photoIdx: number
+    photoIdx: number,
+    data: IProduct,
+    photo: JSX.Element
 }
 
 export default class Product extends React.Component<Props, State> {
     constructor(props: Props) {
         super(props);
 
-        this.state = { photoIdx: 0 }
+        let product = getProductById(parseInt(this.props.match.params.id));
+        this.state = { photoIdx: 0, data: product, photo: null }
 
         this.togglePhoto = this.togglePhoto.bind(this);
+
+        this.showFullPhoto = this.showFullPhoto.bind(this);
+        this.hideFullPhoto = this.hideFullPhoto.bind(this);
     }
 
     togglePhoto(dir: number = 1) {
         let nextPhotoIdx = this.state.photoIdx + dir;
-        if (this.props.data.photos[nextPhotoIdx]) {
+        if (this.state.data.photos[nextPhotoIdx]) {
             this.setState({
                 photoIdx: nextPhotoIdx
             })
         }
         else if (nextPhotoIdx < 0) {
             this.setState({
-                photoIdx: this.props.data.photos.length - 1
+                photoIdx: this.state.data.photos.length - 1
             })
         }
         else {
@@ -39,41 +45,57 @@ export default class Product extends React.Component<Props, State> {
         }
     }
 
+    showFullPhoto() {
+        this.setState({
+            photo: <Photo link={this.state.data.photos[this.state.photoIdx].link} hideFullPhoto={this.hideFullPhoto} />
+        })
+    }
+
+    hideFullPhoto() {
+        this.setState({
+            photo: null
+        })
+    }
+
     render() {
+        document.body.style.overflowY = 'hidden';
+
         let style = {
-            backgroundImage: `url(${this.props.data.photos[this.state.photoIdx]?.link})`
+            backgroundImage: `url(${this.state.data.photos[this.state.photoIdx]?.link})`
         }
 
-        let stonesJSX = this.props.data.stones?.map(s => {
+        let stonesJSX = this.state.data.stones?.map(s => {
             return <div className="list-item" key={s}>{s}</div>
         })
 
-        let chakrasJSX = this.props.data.chakras?.map(c => {
+        let chakrasJSX = this.state.data.chakras?.map(c => {
             return <div className="list-item" key={c}>{c}</div>
         })
 
-        let benefitsJSX = this.props.data.benefits?.map(b => {
+        let benefitsJSX = this.state.data.benefits?.map(b => {
             return <div className="list-item" key={b}>{b}</div>
         })
 
-        let arrowDisplay = this.props.data.photos?.length > 1 ? { display: 'inline-block' } : { display: 'none' }
+        let arrowDisplay = this.state.data.photos?.length > 1 ? { display: 'inline-block' } : { display: 'none' }
 
         return (
             <div className="Product-Container">
-                <div className="Product-Background" onClick={this.props.clearProduct}></div>
+                <Link to="/">
+                    <div className="Product-Background"></div>
+                </Link>
                 <div className="Product">
                     <div className="photo" style={style}>
-                        <div className="photo-collider" onClick={() => this.props.showFullPhoto(this.props.data.photos[this.state.photoIdx].link)}></div>
+                        <div className="photo-collider" onClick={this.showFullPhoto}></div>
                         <div className="arrow left" onClick={() => this.togglePhoto(-1)} style={arrowDisplay}></div>
                         <div className="arrow right" onClick={() => this.togglePhoto(1)} style={arrowDisplay}></div>
                     </div>
                     <div className="info">
                         <div className="product-header">
-                            <div>{this.props.data.title}</div>
-                            <div>${this.props.data.price}</div>
+                            <div>{this.state.data.title}</div>
+                            <div>${this.state.data.price}</div>
                         </div>
                         <div className="description">
-                            {this.props.data.description}
+                            {this.state.data.description}
                         </div>
                         <div className="details">
                             <div className="detail">
@@ -91,6 +113,7 @@ export default class Product extends React.Component<Props, State> {
                         </div>
                     </div>
                 </div>
+                {this.state.photo}
             </div>
         )
     }

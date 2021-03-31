@@ -1,11 +1,11 @@
 import { readlink } from 'fs/promises';
 import { url } from 'node:inspector';
 import * as React from 'react';
+import { BrowserRouter as Router, Link } from 'react-router-dom';
 import { IListing } from '../lib/database'
 
 interface Props {
     data: IListing
-    renderProduct: (id: number) => void
 }
 
 interface State {
@@ -99,7 +99,9 @@ export default class Listing extends React.Component<Props, State>  {
                     </div>
                     <div className={`thumbnail ${this.state.imageStyle}`} style={this.state.style}></div>
                 </div >
-                <div className="Listing-Collider" onMouseEnter={this.activate} onMouseLeave={this.deactivate} onClick={() => this.props.renderProduct(this.props.data.id)}></div>
+                <Link to={`/p/${this.props.data.id}`}>
+                    <div className="Listing-Collider" onMouseEnter={this.activate} onMouseLeave={this.deactivate}></div>
+                </Link>
             </div >
         )
     }

@@ -1,11 +1,13 @@
 const path = require("path");
+const HTMLWebpackPlugin = require("html-webpack-plugin");
 
 module.exports = {
-    mode: "development",
+    mode: "production",
     entry: "./src/index.tsx",
     output: {
         path: path.resolve(__dirname, "dist"),
-        filename: "main.js"
+        filename: "main.js",
+        publicPath: '/'
     },
     resolve: {
         extensions: [".ts", ".tsx", ".js", ".jsx", ".scss"]
@@ -13,6 +15,7 @@ module.exports = {
     module: {
         rules: [
             {
+                test: /\.tsx?$/,
                 use: {
                     loader: "babel-loader",
                     options: {
@@ -45,9 +48,16 @@ module.exports = {
     },
     devtool: "source-map",
     devServer: {
-        contentBase: 'dist',
+        historyApiFallback: true,
+        contentBase: path.join(__dirname, 'dist'),
         proxy: {
-            '/': 'http://localhost:3000'
+            '/api': 'http://localhost:3000/api'
         }
-    }
+    },
+    plugins: [
+        new HTMLWebpackPlugin({
+            inject: 'body',
+            template: 'index.html'
+        })
+    ]
 }
