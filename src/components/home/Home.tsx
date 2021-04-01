@@ -1,19 +1,31 @@
 import * as React from 'react';
-import { Link } from 'react-router-dom';
 import Listing from '../Listing';
 import { getAllListings, IListing } from '../../lib/database';
+import cache from '../../lib/cache';
 
 interface State {
     listings: IListing[]
 }
 
 export default class Home extends React.Component<{}, State> {
+    limit = 6;
+
     constructor(props: {}) {
         super(props);
 
-        let listingsData = getAllListings(6);
-        this.state = {
-            listings: listingsData || []
+        this.state = { listings: cache.getCache() }
+
+        if ((cache.getCache()?.length > 0) == false) {
+            getAllListings(true, this.limit)
+                .then(listingsData => {
+                    this.setState({
+                        listings: listingsData || []
+                    }, () => {
+                        cache.setPollBuffer(1000);
+                    })
+                    cache.setCache(listingsData);
+                })
+                .catch(e => console.error(`Could not get all listings in collection \n`, e));
         }
     }
     render() {

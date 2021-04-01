@@ -54,6 +54,7 @@ export default class App extends React.Component<{}, { photo: JSX.Element }> {
                         </Route>
                     </Switch>
                 </Router>
+                {this.state.photo}
                 <div className="footer">&copy; 2021 Nathan Fonseca</div>
             </div>
         )

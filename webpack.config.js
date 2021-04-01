@@ -2,7 +2,7 @@ const path = require("path");
 const HTMLWebpackPlugin = require("html-webpack-plugin");
 
 module.exports = {
-    mode: "development",
+    mode: "production",
     entry: {
         home: "./src/home.tsx",
         collection: "./src/collection.tsx"
@@ -49,14 +49,14 @@ module.exports = {
             }
         ]
     },
-    devtool: "source-map",
+    //devtool: "source-map",
     devServer: {
         historyApiFallback: true,
         contentBase: path.join(__dirname, 'dist'),
         proxy: {
-            '/': 'http://localhost:3000/',
-            '/collection': 'http://localhost:3000/collection',
-            '/api': 'http://localhost:3000/api'
+            '/api': 'http://localhost:3000',
+            '/collection': 'http://localhost:3000',
+            '/': 'http://localhost:3000'
         }
     },
     plugins: [

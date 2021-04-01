@@ -10,6 +10,7 @@ export default class Photo extends React.Component<Props> {
         super(props);
     }
     render() {
+        document.body.style.overflowY = 'hidden';
 
         return (
             <div className="Photo-Container">

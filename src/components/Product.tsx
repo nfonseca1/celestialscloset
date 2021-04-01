@@ -3,8 +3,6 @@ import { Link } from 'react-router-dom';
 import { match } from 'react-router';
 import { History, Location } from 'history';
 import { IProduct, getProductById } from '../lib/database';
-import Photo from './Photo';
-import Context from '../lib/Context';
 
 interface Props {
     match: match<{ id: string }>,
@@ -24,22 +22,28 @@ export default class Product extends React.Component<Props, State> {
     constructor(props: Props) {
         super(props);
 
-        let product = getProductById(parseInt(this.props.match.params.id));
-        this.state = { photoIdx: 0, data: product, photo: null }
+        this.state = { data: null, photo: null, photoIdx: 0 }
+
+        const id = this.props.match.params.id;
+        getProductById(id)
+            .then(product => {
+                this.setState({ data: product })
+            })
+            .catch(e => console.error(`Could not get product with id ${id} \n`, e))
 
         this.togglePhoto = this.togglePhoto.bind(this);
     }
 
     togglePhoto(dir: number = 1) {
         let nextPhotoIdx = this.state.photoIdx + dir;
-        if (this.state.data.photos[nextPhotoIdx]) {
+        if (this.state.data?.photos[nextPhotoIdx]) {
             this.setState({
                 photoIdx: nextPhotoIdx
             })
         }
         else if (nextPhotoIdx < 0) {
             this.setState({
-                photoIdx: this.state.data.photos.length - 1
+                photoIdx: this.state.data?.photos.length - 1
             })
         }
         else {
@@ -53,18 +57,18 @@ export default class Product extends React.Component<Props, State> {
         document.body.style.overflowY = 'hidden';
 
         let style = {
-            backgroundImage: `url(${this.state.data.photos[this.state.photoIdx]?.link})`
+            backgroundImage: `url(${this.state.data?.photos[this.state.photoIdx]?.link || ''})`
         }
 
-        let stonesJSX = this.state.data.stones?.map(s => {
+        let stonesJSX = this.state.data?.stones?.map(s => {
             return <div className="list-item" key={s}>{s}</div>
         })
 
-        let chakrasJSX = this.state.data.chakras?.map(c => {
+        let chakrasJSX = this.state.data?.chakras?.map(c => {
             return <div className="list-item" key={c}>{c}</div>
         })
 
-        let benefitsJSX = this.state.data.benefits?.map(b => {
+        let benefitsJSX = this.state.data?.benefits?.map(b => {
             return <div className="list-item" key={b}>{b}</div>
         })
 
@@ -81,24 +85,24 @@ export default class Product extends React.Component<Props, State> {
             )
         }
 
-        let arrowDisplay = this.state.data.photos?.length > 1 ? { display: 'inline-block' } : { display: 'none' }
+        let arrowDisplay = this.state.data?.photos?.length > 1 ? { display: 'inline-block' } : { display: 'none' }
 
         return (
             <div className="Product-Container">
                 {backJSX}
                 <div className="Product">
                     <div className="photo" style={style}>
-                        <div className="photo-collider" onClick={() => this.props.showFullPhoto(this.state.data.photos[this.state.photoIdx].link)}></div>
+                        <div className="photo-collider" onClick={() => this.props.showFullPhoto(this.state.data?.photos[this.state.photoIdx].link)}></div>
                         <div className="arrow left" onClick={() => this.togglePhoto(-1)} style={arrowDisplay}></div>
                         <div className="arrow right" onClick={() => this.togglePhoto(1)} style={arrowDisplay}></div>
                     </div>
                     <div className="info">
                         <div className="product-header">
-                            <div>{this.state.data.title}</div>
-                            <div>${this.state.data.price}</div>
+                            <div>{this.state.data?.title}</div>
+                            <div>${this.state.data?.price}</div>
                         </div>
                         <div className="description">
-                            {this.state.data.description}
+                            {this.state.data?.description}
                         </div>
                         <div className="details">
                             <div className="detail">

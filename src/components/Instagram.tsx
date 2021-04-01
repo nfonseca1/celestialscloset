@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import InstagramEmbed from 'react-instagram-embed';
 import Context from '../lib/Context';
 import { getAllInstagramPosts } from '../lib/database';
+import cache from '../lib/cache';
 
 // For running the instagram embed function through it's window property
 declare global {
@@ -22,6 +23,9 @@ export default class Instagram extends React.Component<Props, { posts: string[] 
         this.state = { posts: posts }
     }
     render() {
+        cache.isPolling(true);
+        document.body.style.overflowY = 'hidden';
+
         let backJSX = (
             <Link to='/'>
                 <div className='Instagram-Background'></div>
@@ -70,5 +74,10 @@ export default class Instagram extends React.Component<Props, { posts: string[] 
                 </div>
             </div>
         )
+    }
+
+    componentWillUnmount() {
+        cache.setPollBuffer(1000);
+        cache.isPolling(false);
     }
 }
