@@ -5,7 +5,8 @@ module.exports = {
     mode: "production",
     entry: {
         home: "./src/home.tsx",
-        collection: "./src/collection.tsx"
+        collection: "./src/collection.tsx",
+        adminRegistration: "./src/adminRegistration.tsx"
     },
     output: {
         path: path.resolve(__dirname, "dist"),
@@ -18,7 +19,7 @@ module.exports = {
     module: {
         rules: [
             {
-                test: /\.tsx?$/,
+                test: /\.tsx$/,
                 use: {
                     loader: "babel-loader",
                     options: {
@@ -49,11 +50,12 @@ module.exports = {
             }
         ]
     },
-    //devtool: "source-map",
+    // devtool: "source-map",
     devServer: {
         historyApiFallback: true,
         contentBase: path.join(__dirname, 'dist'),
         proxy: {
+            '/admin': 'http://localhost:3000',
             '/api': 'http://localhost:3000',
             '/collection': 'http://localhost:3000',
             '/': 'http://localhost:3000'
@@ -71,6 +73,12 @@ module.exports = {
             template: 'index.html',
             filename: 'collection.html',
             chunks: ['collection']
+        }),
+        new HTMLWebpackPlugin({
+            inject: 'body',
+            template: 'admin.html',
+            filename: 'adminRegistration.html',
+            chunks: ['adminRegistration']
         })
     ]
 }

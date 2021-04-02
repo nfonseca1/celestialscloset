@@ -1,13 +1,29 @@
 import favicon from 'serve-favicon';
 import express, { Application, Request, Response } from 'express';
+import session from 'express-session';
+import memorystore from 'memorystore';
 import Database from "./lib/data";
-import { IProduct, IUser, IComment } from "./lib/schemas";
-import { verifyAdminToken } from './lib/database';
+import { IProduct, IUser, IComment, IRequest } from "./lib/schemas";
+import { verifyAdminToken, createUser, removeAdminToken, getUser } from './lib/database';
+import { validate } from 'uuid';
+import { validateName, validatePassword, validateUsername } from './lib/validation';
+import { create } from 'node:domain';
 
 const app: Application = express();
-
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 app.use(favicon(__dirname + "/favicon.png"));
 app.use(express.static(__dirname + "/dist/"));
+
+let MemoryStore = memorystore(session);
+app.use(session({
+    secret: "Shhh, it's a secret..",
+    resave: false,
+    saveUninitialized: true,
+    store: new MemoryStore({
+        checkPeriod: 86400000
+    })
+}))
 
 interface ICache {
     products?: {
@@ -15,7 +31,6 @@ interface ICache {
     },
     user?: IUser
 }
-
 let cache: ICache = {
     products: {
 
@@ -81,17 +96,78 @@ app.get("/api/product", (req, res) => {
     res.send(data);
 })
 
-app.get("/admin/:adminToken", (req, res) => {
+app.get("/admin/home", (req, res) => {
+    res.send("Admin Dashboard");
+})
+
+app.get("/admin/:adminToken", (req: IRequest, res) => {
     let token = req.params.adminToken;
 
-    verifyAdminToken(token);
+    verifyAdminToken(token)
+        .then(verification => {
+            if (verification) {
+                req.session.adminToken = verification;
+                res.sendFile(__dirname + "/dist/adminRegistration.html");
+            }
+            else {
+                res.send("Token not valid or has expired");
+            }
+        })
+})
+
+app.post("/admin/register", (req: IRequest, res) => {
+    let username = req.body.username.trim();
+    let firstname = req.body.firstname.trim();
+    let lastname = req.body.lastname.trim();
+    let password = req.body.password.trim();
+
+    let errors: string[] = [];
+    errors.push(validateUsername(username));
+    errors.push(validateName(firstname));
+    errors.push(validateName(lastname));
+    errors.push(validatePassword(password));
+
+    for (let err of errors) {
+        if (err !== '') {
+            res.redirect('/admin/' + req.session.adminToken);
+            return;
+        }
+    }
+
+    getUser(username)
+        .then(user => {
+            if (user) {
+                res.redirect('/admin/' + req.session.adminToken);
+            }
+            else {
+                createUser({
+                    username: username,
+                    password: password,
+                    firstname: firstname,
+                    lastname: lastname,
+                    isAdmin: true
+                })
+                    .then(newUser => {
+                        if (newUser) {
+                            req.session.user = newUser;
+                            req.session.save(() => {
+                                res.redirect('/admin/home');
+                            })
+                            removeAdminToken(req.session.adminToken);
+                        }
+                        else {
+                            res.send('Admin creation failed. Please try again in a minute or contact developer');
+                        }
+                    })
+            }
+        })
 })
 
 app.get("/admin", (req, res) => {
     res.send("Admin Login");
 })
 
-app.get("/*", (req, res) => {
+app.get("/p/*", (req, res) => {
     res.sendFile(__dirname + "/dist/collection.html");
 })
 

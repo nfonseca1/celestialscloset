@@ -5,3 +5,5 @@ dist/*
 Notes
 Misc
 .env
+app.js*
+/lib/*.js*

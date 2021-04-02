@@ -1,3 +1,6 @@
+import { Request } from 'express';
+import { Session } from 'express-session';
+
 export interface IProduct {
     id: string,
     title: string,
@@ -38,4 +41,8 @@ export interface IComment {
     userId: string,
     author: string,
     comment: string
+}
+
+export interface IRequest extends Request {
+    session: any
 }
