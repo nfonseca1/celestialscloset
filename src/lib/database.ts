@@ -16,9 +16,16 @@ export interface IListing {
 
 export interface IProduct extends IListing {
     description: string,
-    stones: string[],
-    chakras: string[],
-    benefits: string[]
+    likes?: number,
+    details?: {
+        stones?: {
+            stone: string,
+            color?: string
+        }[],
+        chakras?: string[];
+        benefits?: string[];
+    },
+    options?: {}
 }
 
 

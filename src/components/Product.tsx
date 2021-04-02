@@ -60,15 +60,15 @@ export default class Product extends React.Component<Props, State> {
             backgroundImage: `url(${this.state.data?.photos[this.state.photoIdx]?.link || ''})`
         }
 
-        let stonesJSX = this.state.data?.stones?.map(s => {
-            return <div className="list-item" key={s}>{s}</div>
+        let stonesJSX = this.state.data?.details.stones?.map(s => {
+            return <div className="list-item" key={s.stone}>{s.stone}</div>
         })
 
-        let chakrasJSX = this.state.data?.chakras?.map(c => {
+        let chakrasJSX = this.state.data?.details.chakras?.map(c => {
             return <div className="list-item" key={c}>{c}</div>
         })
 
-        let benefitsJSX = this.state.data?.benefits?.map(b => {
+        let benefitsJSX = this.state.data?.details.benefits?.map(b => {
             return <div className="list-item" key={b}>{b}</div>
         })
 
