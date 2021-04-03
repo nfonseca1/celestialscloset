@@ -48,7 +48,7 @@ export default class PhotoPicker extends React.Component<{}, State> {
         return (
             <div className="PhotoPicker">
                 <div className="heading">Photos</div>
-                <div className="input-description">Select up to 10 photos</div>
+                <div className="input-description">Select up to 10 photos. The order you select them in will be the order they display in.</div>
                 <button type="button" className="upload-input-btn" onClick={this.handleUploadClick}>Select Images</button>
                 <span>{this.state.previews.length} Images</span>
                 <input className="upload-input" type="file" accept=".jpg, .jpeg, .png" multiple onChange={this.handleSelection}></input>
