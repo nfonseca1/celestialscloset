@@ -13,3 +13,14 @@ $secondary-font: 'Courgette', cursive;
         background-color: #a7a7a7;
     }
 }
+
+%scrollX {
+    overflow: scroll;
+    overflow-y: hidden;
+    &::-webkit-scrollbar {
+        height: 4px;
+    }
+    &::-webkit-scrollbar-thumb {
+        background-color: #a7a7a7;
+    }
+}

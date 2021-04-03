@@ -97,7 +97,11 @@ app.get("/api/product", (req, res) => {
 })
 
 app.get("/admin/home", (req, res) => {
-    res.send("Admin Dashboard");
+    res.sendFile(__dirname + "/dist/admin.html");
+})
+
+app.get("/admin/listings/new", (req, res) => {
+    res.sendFile(__dirname + "/dist/admin.html");
 })
 
 app.get("/admin/:adminToken", (req: IRequest, res) => {

@@ -2,11 +2,12 @@ const path = require("path");
 const HTMLWebpackPlugin = require("html-webpack-plugin");
 
 module.exports = {
-    mode: "production",
+    mode: "development",
     entry: {
         home: "./src/home.tsx",
         collection: "./src/collection.tsx",
-        adminRegistration: "./src/adminRegistration.tsx"
+        adminRegistration: "./src/adminRegistration.tsx",
+        dashboard: "./src/dashboard.tsx"
     },
     output: {
         path: path.resolve(__dirname, "dist"),
@@ -50,7 +51,7 @@ module.exports = {
             }
         ]
     },
-    // devtool: "source-map",
+    devtool: "source-map",
     devServer: {
         historyApiFallback: true,
         contentBase: path.join(__dirname, 'dist'),
@@ -79,6 +80,12 @@ module.exports = {
             template: 'admin.html',
             filename: 'adminRegistration.html',
             chunks: ['adminRegistration']
+        }),
+        new HTMLWebpackPlugin({
+            inject: 'body',
+            template: 'index.html',
+            filename: 'admin.html',
+            chunks: ['dashboard']
         })
     ]
 }
