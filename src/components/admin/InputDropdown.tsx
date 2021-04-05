@@ -1,27 +1,37 @@
 import * as React from 'react';
 import SelectionList from './SelectionList';
 import data from '../../lib/newListingData';
+import { getListItems } from '../../lib/database';
 
 interface Props {
-    label: string
+    label: 'stones' | 'benefits'
 }
 
 interface State {
     listItems: string[]
     dropdownVisible: boolean,
-    selections: string[]
+    selections: string[],
+    inputValue: string
 }
 
 export default class InputDropdown extends React.Component<Props, State> {
-    constructor(props: { label: string }) {
+    constructor(props: Props) {
         super(props);
 
-        this.state = { listItems: ['Aqua Aura Quartz', 'Rose Quartz', 'Turquoise', 'Sun Quartz', 'Obsidian'], dropdownVisible: false, selections: [] }
+        this.state = { listItems: [], dropdownVisible: false, selections: [], inputValue: '' }
+
+        getListItems()
+            .then(lists => {
+                this.setState({
+                    listItems: lists[this.props.label]
+                })
+            })
 
         this.showDropdown = this.showDropdown.bind(this);
         this.hideDropdown = this.hideDropdown.bind(this);
         this.addToSelection = this.addToSelection.bind(this);
         this.removeSelection = this.removeSelection.bind(this);
+        this.handleChange = this.handleChange.bind(this);
     }
 
     showDropdown() {
@@ -58,6 +68,12 @@ export default class InputDropdown extends React.Component<Props, State> {
         })
     }
 
+    handleChange(e: React.ChangeEvent) {
+        this.setState({
+            inputValue: (e.target as HTMLInputElement).value
+        })
+    }
+
     render() {
         let style: React.CSSProperties = {
             display: this.state.dropdownVisible ? 'inline-block' : 'none'
@@ -70,8 +86,8 @@ export default class InputDropdown extends React.Component<Props, State> {
         return (
             <div className="stones">
                 <div className="input">
-                    <input className="dropdown-input" type="text" onFocus={this.showDropdown} onBlur={this.hideDropdown} />
-                    <button type="button" className="dropdown-btn">Add</button>
+                    <input className="dropdown-input" type="text" onFocus={this.showDropdown} onBlur={this.hideDropdown} onChange={this.handleChange} />
+                    <button type="button" className="dropdown-btn" onClick={() => this.addToSelection(this.state.inputValue)}>Add</button>
                 </div>
                 <div className="dropdown" style={style}>{items}</div>
                 <SelectionList items={this.state.selections} removeSelection={this.removeSelection} />

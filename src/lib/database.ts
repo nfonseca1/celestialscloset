@@ -57,6 +57,10 @@ export async function getProductById(id: string): Promise<IProduct> {
     return data;
 }
 
+export function getListItems(): Promise<{ stones: string[], benefits: string[] }> {
+    return fetch(`/admin/lists/`)
+        .then(res => res.json())
+}
 
 export function getAllInstagramPosts(limit?: number): string[] {
     return instagramPosts.slice(0, limit);

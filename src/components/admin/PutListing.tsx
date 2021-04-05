@@ -19,6 +19,11 @@ export default class PutListing extends React.Component<{}, { priceErr: string }
     }
 
     handleSubmit() {
+        if (isNaN(parseFloat(data.price))) {
+            this.setState({ priceErr: 'Price should just be a number. Integer or decimal value.' })
+            return;
+        }
+
         let formData = new FormData();
         formData.append('title', data.title);
         formData.append('price', data.price);

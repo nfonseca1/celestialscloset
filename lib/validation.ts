@@ -30,3 +30,19 @@ export function validatePassword(password: string): string {
 
     return '';
 }
+
+export function validateNewListItem(currentList: string[], newListItem: string): string {
+    let words = newListItem.trim().toLowerCase().split(" ");
+    let newWords = []
+
+    for (let word of words) {
+        let first = word.slice(0, 1);
+        let allButFirst = word.slice(1);
+        newWords.push(first.toUpperCase() + allButFirst);
+    }
+
+    let newItem = newWords.join(" ");
+
+    let foundItem = currentList.find(li => li === newItem);
+    return foundItem ? '' : newItem
+}

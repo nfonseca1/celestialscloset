@@ -6,8 +6,8 @@ import multer from 'multer';
 import Database from "./lib/data";
 import { v4 as uuidv4 } from 'uuid';
 import { IProduct, IUser, IComment, IRequest, IProductInfoList } from "./lib/schemas";
-import { verifyAdminToken, createUser, removeAdminToken, getUser, uploadPhoto, createProduct } from './lib/database';
-import { validateName, validatePassword, validateUsername } from './lib/validation';
+import { verifyAdminToken, createUser, removeAdminToken, getUser, uploadPhoto, createProduct, getLists, updateLists } from './lib/database';
+import { validateName, validatePassword, validateUsername, validateNewListItem } from './lib/validation';
 
 const app: Application = express();
 app.use(express.json({ limit: '100mb' }));
@@ -40,6 +40,14 @@ let cache: ICache = {
 };
 
 const listingsMaxLimit = 15;
+
+let lists: {
+    stones: string[],
+    benefits: string[]
+} = {
+    stones: [],
+    benefits: []
+}
 
 app.get("/", (req, res) => {
     res.sendFile(__dirname + "/dist/home.html");
@@ -134,7 +142,45 @@ app.post("/admin/listings/new", upload.any(), (req, res) => {
         hideChakras: req.body.hideChakras,
         hideBenefits: req.body.hideBenefits
     }
-    createProduct(productInfo, id, s3Files);
+    createProduct(productInfo, id, s3Files)
+        .then(created => {
+            if (created) {
+                let newStones = [];
+                for (let stone of productInfo.stones) {
+                    let valid = validateNewListItem(lists.stones, stone);
+                    if (valid) newStones.push(valid);
+                }
+                let newBenefits = [];
+                for (let benefit of productInfo.benefits) {
+                    let valid = validateNewListItem(lists.benefits, benefit);
+                    if (valid) newBenefits.push(valid);
+                }
+
+                if (newStones.length > 0 || newBenefits.length > 0) {
+                    lists.stones.push(...newStones);
+                    lists.benefits.push(...newBenefits);
+                    updateLists(lists.stones, lists.benefits);
+                }
+            }
+        })
+})
+
+app.get("/admin/lists", (req, res) => {
+    if (lists.stones.length > 0 && lists.benefits.length > 0) {
+        res.send({ stones: lists.stones, benefits: lists.benefits });
+    }
+    else {
+        getLists()
+            .then(data => {
+                if (lists.stones.length === 0) {
+                    lists.stones = data.stones;
+                }
+                if (lists.benefits.length === 0) {
+                    lists.benefits = data.benefits;
+                }
+                res.send({ stones: lists.stones, benefits: lists.benefits })
+            })
+    }
 })
 
 app.get("/admin/:adminToken", (req: IRequest, res) => {

@@ -105,9 +105,45 @@ export function uploadPhoto(photo: Buffer, name: string) {
         .catch(e => console.error(`Could not upload photo ${name} \n`, e));
 }
 
+export function getLists(): Promise<any> {
+    let getParams = {
+        Bucket: process.env.BUCKET,
+        Key: process.env.CONFIG_KEY
+    }
+    return s3.getObject(getParams).promise()
+        .then(data => {
+            let configJSON = JSON.parse(data.Body.toString());
+            return { stones: configJSON.stones, benefits: configJSON.benefits }
+        })
+        .catch(e => console.error(`Failed to get lists \n`, e))
+}
+
+export function updateLists(stones: string[], benefits: string[]) {
+    let getParams = {
+        Bucket: process.env.BUCKET,
+        Key: process.env.CONFIG_KEY
+    }
+    s3.getObject(getParams).promise()
+        .then(data => {
+            let configJSON = JSON.parse(data.Body.toString());
+            configJSON.stones = stones;
+            configJSON.benefits = benefits;
+
+            let putParams = {
+                Bucket: process.env.BUCKET,
+                Key: process.env.CONFIG_KEY,
+                Body: JSON.stringify(configJSON)
+            }
+            s3.putObject(putParams).promise()
+                .then(() => console.log('Successfully updated lists'))
+                .catch(e => console.error('Failed to update lists \n', e))
+        })
+        .catch(e => console.error('Failed to update lists \n', e))
+}
+
 
 // DynamoDB
-export function createProduct(productInfo: IProductInfoList, id: string, files: string[]) {
+export function createProduct(productInfo: IProductInfoList, id: string, files: string[]): Promise<boolean> {
     let photos = files.map(file => {
         return { link: `https://${process.env.BUCKET}.s3.amazonaws.com/${file}` };
     })
@@ -139,11 +175,15 @@ export function createProduct(productInfo: IProductInfoList, id: string, files: 
         }
     }
 
-    dbClient.put(putParams).promise()
+    return dbClient.put(putParams).promise()
         .then(data => {
             console.log(`Successfully created product with id: ${id}`);
+            return true;
         })
-        .catch(e => console.error(`Could not create new product with id: ${id} \n`, e));
+        .catch(e => {
+            console.error(`Could not create new product with id: ${id} \n`, e);
+            return false;
+        })
 }
 
 export function getUser(username: string): Promise<any> {

@@ -195,7 +195,7 @@ let database: {
                     stone: 'Obsidian'
                 }],
                 chakras: ['Sacral', 'Root'],
-                benefits: ['Energy Clearing', 'Shadow Work', 'Anxiety Relief']
+                benefits: ['Energy Cleansing', 'Shadow Work', 'Anxiety Relief']
             }
         }
     ]
