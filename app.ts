@@ -2,18 +2,20 @@ import favicon from 'serve-favicon';
 import express, { Application, Request, Response } from 'express';
 import session from 'express-session';
 import memorystore from 'memorystore';
+import multer from 'multer';
 import Database from "./lib/data";
-import { IProduct, IUser, IComment, IRequest } from "./lib/schemas";
-import { verifyAdminToken, createUser, removeAdminToken, getUser } from './lib/database';
-import { validate } from 'uuid';
+import { v4 as uuidv4 } from 'uuid';
+import { IProduct, IUser, IComment, IRequest, IProductInfoList } from "./lib/schemas";
+import { verifyAdminToken, createUser, removeAdminToken, getUser, uploadPhoto, createProduct } from './lib/database';
 import { validateName, validatePassword, validateUsername } from './lib/validation';
-import { create } from 'node:domain';
 
 const app: Application = express();
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(express.json({ limit: '100mb' }));
+app.use(express.urlencoded({ extended: true, limit: '100mb' }));
 app.use(favicon(__dirname + "/favicon.png"));
 app.use(express.static(__dirname + "/dist/"));
+
+let upload = multer();
 
 let MemoryStore = memorystore(session);
 app.use(session({
@@ -102,6 +104,37 @@ app.get("/admin/home", (req, res) => {
 
 app.get("/admin/listings/new", (req, res) => {
     res.sendFile(__dirname + "/dist/admin.html");
+})
+
+app.post("/admin/listings/new", upload.any(), (req, res) => {
+    let id = uuidv4();
+    let s3Files = [];
+    for (let i = 0; i < req.files.length; i++) {
+        let photo = (req.files as any)[i];
+        let dotChunks = photo.originalname.split(".");
+        let extension = dotChunks[dotChunks.length - 1].toLowerCase();
+
+        if (extension !== 'jpg' && extension !== 'jpeg' && extension !== 'png') continue;
+
+        let s3File = `${id}-${i}.${extension}`;
+        s3Files.push(s3File);
+        uploadPhoto(photo.buffer, s3File);
+    }
+
+    let price = isNaN(parseFloat(req.body.price)) ? null : parseFloat(req.body.price)
+    let productInfo: IProductInfoList = {
+        inactive: req.body.inactive,
+        title: req.body.title,
+        price: price,
+        description: req.body.description,
+        stones: JSON.parse(req.body.stones),
+        chakras: JSON.parse(req.body.chakras),
+        benefits: JSON.parse(req.body.benefits),
+        hideStones: req.body.hideStones,
+        hideChakras: req.body.hideChakras,
+        hideBenefits: req.body.hideBenefits
+    }
+    createProduct(productInfo, id, s3Files);
 })
 
 app.get("/admin/:adminToken", (req: IRequest, res) => {

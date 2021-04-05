@@ -1,5 +1,6 @@
 import * as React from 'react';
 import SelectionList from './SelectionList';
+import data from '../../lib/newListingData';
 
 interface Props {
     label: string
@@ -42,7 +43,9 @@ export default class InputDropdown extends React.Component<Props, State> {
         if (this.state.selections.filter(s => s === item).length > 0) return;
         this.setState((state) => ({
             selections: [...state.selections, item]
-        }))
+        }), () => {
+            data[this.props.label] = this.state.selections;
+        })
     }
 
     removeSelection(item: string) {
@@ -50,6 +53,8 @@ export default class InputDropdown extends React.Component<Props, State> {
 
         this.setState({
             selections: newSelectionArr
+        }, () => {
+            data[this.props.label] = this.state.selections;
         })
     }
 

@@ -2,7 +2,7 @@ import { Credentials, S3, DynamoDB } from 'aws-sdk';
 import { v4 as uuidv4 } from 'uuid';
 import bcrypt from 'bcrypt';
 import dotenv from 'dotenv';
-import { IProduct, IUser, IComment } from './schemas';
+import { IProduct, IUser, IComment, IProductInfoList } from './schemas';
 
 dotenv.config();
 const saltRounds = 10;
@@ -91,8 +91,61 @@ export function removeAdminToken(token: string) {
         .catch(e => console.error(`Failed to get admin tokens in s3 \n`, e));
 }
 
+export function uploadPhoto(photo: Buffer, name: string) {
+    let putParams = {
+        Bucket: process.env.BUCKET,
+        Key: `photos/${name}`,
+        Body: photo,
+        ACL: 'public-read'
+    }
+    s3.putObject(putParams).promise()
+        .then(data => {
+            console.log(`Successfully uploaded photo ${name}`);
+        })
+        .catch(e => console.error(`Could not upload photo ${name} \n`, e));
+}
+
 
 // DynamoDB
+export function createProduct(productInfo: IProductInfoList, id: string, files: string[]) {
+    let photos = files.map(file => {
+        return { link: `https://${process.env.BUCKET}.s3.amazonaws.com/${file}` };
+    })
+    let stones = productInfo.stones.map((stone: string) => {
+        return { stone: stone }
+    })
+
+    let options: any = {}
+    if (productInfo.hideStones) options.hideStones = productInfo.hideStones;
+    if (productInfo.hideChakras) options.hideChakras = productInfo.hideChakras;
+    if (productInfo.hideBenefits) options.hideBenefits = productInfo.hideBenefits;
+
+    let putParams = {
+        TableName: 'Products',
+        Item: {
+            id: id,
+            isActive: productInfo.inactive ? 'false' : 'true',
+            date: Date.now().toString(),
+            title: productInfo.title,
+            price: productInfo.price,
+            description: productInfo.description,
+            photos: photos,
+            details: {
+                stones: stones,
+                chakras: productInfo.chakras,
+                benefits: productInfo.benefits
+            },
+            options: options
+        }
+    }
+
+    dbClient.put(putParams).promise()
+        .then(data => {
+            console.log(`Successfully created product with id: ${id}`);
+        })
+        .catch(e => console.error(`Could not create new product with id: ${id} \n`, e));
+}
+
 export function getUser(username: string): Promise<any> {
     let getParams = {
         TableName: 'Users',

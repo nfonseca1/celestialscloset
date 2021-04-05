@@ -1,5 +1,6 @@
 import * as React from 'react';
 import SelectionList from './SelectionList';
+import data from '../../lib/newListingData';
 
 interface State {
     dropdownVisible: boolean,
@@ -38,7 +39,9 @@ export default class ChakraDropdown extends React.Component<{}, State> {
         this.setState((state) => ({
             selections: [...state.selections, item],
             dropdownVisible: false
-        }))
+        }), () => {
+            data.chakras = this.state.selections
+        })
     }
 
     removeSelection(item: string) {
@@ -46,6 +49,8 @@ export default class ChakraDropdown extends React.Component<{}, State> {
 
         this.setState({
             selections: newSelectionArr
+        }, () => {
+            data.chakras = this.state.selections
         })
     }
 

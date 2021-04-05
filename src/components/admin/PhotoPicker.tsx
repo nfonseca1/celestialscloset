@@ -1,4 +1,5 @@
 import * as React from 'react';
+import data from '../../lib/newListingData';
 
 interface State {
     previews: JSX.Element[]
@@ -18,22 +19,25 @@ export default class PhotoPicker extends React.Component<{}, State> {
     }
 
     handleSelection(e: React.ChangeEvent) {
-        let promises: Promise<JSX.Element>[] = []
+        let promises: Promise<JSX.Element>[] = [];
 
         let files = (e.target as HTMLInputElement).files;
         if (files) {
             let length = files.length < 10 ? files.length : 10;
+
+            data.photos = [...files].slice(0, length);
+
             for (let i = 0; i < length; i++) {
                 let file = files[i];
 
-                let reader = new FileReader();
+                let dataReader = new FileReader();
                 let p: Promise<JSX.Element> = new Promise(resolve => {
-                    reader.onload = (e) => {
-                        resolve(<img src={e.target.result as string} className="preview" />)
+                    dataReader.onload = (e) => {
+                        resolve(<img src={e.target.result as string} className="preview" key={e.target.result as string} />)
                     }
                 })
                 promises.push(p);
-                reader.readAsDataURL(file);
+                dataReader.readAsDataURL(file);
             }
         }
         Promise.all(promises)

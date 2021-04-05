@@ -46,3 +46,16 @@ export interface IComment {
 export interface IRequest extends Request {
     session: any
 }
+
+export interface IProductInfoList {
+    title: string,
+    price: number,
+    description: string,
+    stones: string[],
+    chakras: string[],
+    benefits: string[],
+    inactive?: boolean,
+    hideStones?: boolean,
+    hideChakras?: boolean,
+    hideBenefits?: boolean
+}
