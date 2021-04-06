@@ -5,7 +5,7 @@ let listingsCache: IListing[] = [
 ];
 let polling = false;
 let pollBufferTime = 0;
-let paginationIdx = 0;
+let paginationKey: any = null;
 
 let cache = {
     getCache: () => {
@@ -29,11 +29,11 @@ let cache = {
         return polling;
     },
 
-    getPaginationIdx: () => {
-        return paginationIdx;
+    getPaginationKey: () => {
+        return JSON.stringify(paginationKey);
     },
-    setPaginationIdx: (idx: number) => {
-        paginationIdx = idx;
+    setPaginationKey: (key: any) => {
+        paginationKey = key;
     }
 }
 

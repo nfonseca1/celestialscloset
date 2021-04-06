@@ -24,8 +24,21 @@ let dynamodb = new DynamoDB({
 
 let dbClient = new DynamoDB.DocumentClient({ service: dynamodb });
 
+let database: {
+    verifyAdminToken?: (token: string) => Promise<string | null>,
+    removeAdminToken?: (token: string) => void,
+    uploadPhoto?: (photo: Buffer, name: string) => void,
+    getLists?: () => Promise<any>,
+    updateLists?: (stones: string[], benefits: string[]) => void,
+    createProduct?: (productInfo: IProductInfoList, id: string, files: string[]) => Promise<boolean>,
+    getUser?: (username: string) => Promise<any>,
+    createUser?: (user: INewUser) => Promise<IUser>,
+    getProducts?: (limit: number, descending: boolean, paginationKey?: any) => Promise<any>,
+    getProductById?: (id: string) => Promise<any>
+} = {};
+
 // S3
-export function verifyAdminToken(token: string): Promise<string | null> {
+database.verifyAdminToken = (token: string): Promise<string | null> => {
     let getParams = {
         Bucket: process.env.BUCKET,
         Key: process.env.TOKENS_KEY
@@ -63,7 +76,7 @@ export function verifyAdminToken(token: string): Promise<string | null> {
         })
 }
 
-export function removeAdminToken(token: string) {
+database.removeAdminToken = (token: string) => {
     let getParams = {
         Bucket: process.env.BUCKET,
         Key: process.env.TOKENS_KEY
@@ -91,7 +104,7 @@ export function removeAdminToken(token: string) {
         .catch(e => console.error(`Failed to get admin tokens in s3 \n`, e));
 }
 
-export function uploadPhoto(photo: Buffer, name: string) {
+database.uploadPhoto = (photo: Buffer, name: string) => {
     let putParams = {
         Bucket: process.env.BUCKET,
         Key: `photos/${name}`,
@@ -105,7 +118,7 @@ export function uploadPhoto(photo: Buffer, name: string) {
         .catch(e => console.error(`Could not upload photo ${name} \n`, e));
 }
 
-export function getLists(): Promise<any> {
+database.getLists = (): Promise<any> => {
     let getParams = {
         Bucket: process.env.BUCKET,
         Key: process.env.CONFIG_KEY
@@ -118,7 +131,7 @@ export function getLists(): Promise<any> {
         .catch(e => console.error(`Failed to get lists \n`, e))
 }
 
-export function updateLists(stones: string[], benefits: string[]) {
+database.updateLists = (stones: string[], benefits: string[]) => {
     let getParams = {
         Bucket: process.env.BUCKET,
         Key: process.env.CONFIG_KEY
@@ -143,9 +156,9 @@ export function updateLists(stones: string[], benefits: string[]) {
 
 
 // DynamoDB
-export function createProduct(productInfo: IProductInfoList, id: string, files: string[]): Promise<boolean> {
+database.createProduct = (productInfo: IProductInfoList, id: string, files: string[]): Promise<boolean> => {
     let photos = files.map(file => {
-        return { link: `https://${process.env.BUCKET}.s3.amazonaws.com/${file}` };
+        return { link: `https://${process.env.BUCKET}.s3.amazonaws.com/photos/${file}` };
     })
     let stones = productInfo.stones.map((stone: string) => {
         return { stone: stone }
@@ -186,7 +199,7 @@ export function createProduct(productInfo: IProductInfoList, id: string, files: 
         })
 }
 
-export function getUser(username: string): Promise<any> {
+database.getUser = (username: string): Promise<any> => {
     let getParams = {
         TableName: 'Users',
         Key: {
@@ -209,7 +222,7 @@ interface INewUser {
     lastname: string,
     isAdmin: boolean
 }
-export function createUser(user: INewUser): Promise<IUser> {
+database.createUser = (user: INewUser): Promise<IUser> => {
     return bcrypt.hash(user.password, saltRounds).then(hash => {
         let putParams = {
             TableName: 'Users',
@@ -235,3 +248,47 @@ export function createUser(user: INewUser): Promise<IUser> {
             return null;
         })
 }
+
+database.getProducts = (limit: number, descending: boolean, paginationKey?: any): Promise<any> => {
+    let getParams: any = {
+        TableName: 'Products',
+        Limit: limit,
+        ScanIndexForward: !descending,
+        KeyConditionExpression: 'isActive = :hkey and #date > :rkey',
+        ExpressionAttributeNames: {
+            '#date': 'date'
+        },
+        ExpressionAttributeValues: {
+            ':hkey': 'true',
+            ':rkey': '0'
+        }
+    }
+    if (paginationKey) getParams.ExclusiveStartKey = paginationKey;
+    return dbClient.query(getParams).promise()
+        .then(data => {
+            return data;
+        })
+        .catch(e => console.error(`Failed to query products \n`, e));
+}
+
+database.getProductById = (id: string): Promise<any> => {
+    let getParams = {
+        TableName: 'Products',
+        IndexName: 'isActive-id-index',
+        KeyConditionExpression: 'isActive = :hkey and #id > :rkey',
+        ExpressionAttributeNames: {
+            '#id': 'id'
+        },
+        ExpressionAttributeValues: {
+            ':hkey': 'true',
+            ':rkey': id
+        }
+    }
+    return dbClient.query(getParams).promise()
+        .then(data => {
+            return data.Items[0];
+        })
+        .catch(e => console.error(`Could not get product with id: ${id} \n`, e))
+}
+
+export default database;

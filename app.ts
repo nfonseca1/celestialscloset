@@ -3,10 +3,9 @@ import express, { Application, Request, Response } from 'express';
 import session from 'express-session';
 import memorystore from 'memorystore';
 import multer from 'multer';
-import Database from "./lib/data";
 import { v4 as uuidv4 } from 'uuid';
 import { IProduct, IUser, IComment, IRequest, IProductInfoList } from "./lib/schemas";
-import { verifyAdminToken, createUser, removeAdminToken, getUser, uploadPhoto, createProduct, getLists, updateLists } from './lib/database';
+import database from './lib/database';
 import { validateName, validatePassword, validateUsername, validateNewListItem } from './lib/validation';
 
 const app: Application = express();
@@ -27,18 +26,6 @@ app.use(session({
     })
 }))
 
-interface ICache {
-    products?: {
-        [id: string]: IProduct
-    },
-    user?: IUser
-}
-let cache: ICache = {
-    products: {
-
-    }
-};
-
 const listingsMaxLimit = 15;
 
 let lists: {
@@ -57,53 +44,70 @@ app.get("/collection", (req, res) => {
     res.sendFile(__dirname + "/dist/collection.html");
 })
 
-app.get("/api/allproducts", (req: Request<{}, {}, {}, {
-    descending: string,
-    limit: string,
-    paginationIdx: string
-}>, res) => {
+app.get("/api/allproducts", (req: IRequest, res) => {
     // Query params
     let descending = req.query.descending == 'true';
     let limit = listingsMaxLimit; // Default limit
     if (req.query.limit) {
-        let parsedLimit = parseInt(req.query.limit);
+        let parsedLimit = parseInt(req.query.limit as string);
         if (parsedLimit < limit) {
             limit = parsedLimit;
         }
     }
-    let paginationStart = parseInt(req.query.paginationIdx);
 
     // Query database
-    let data = Database.Products.map(d => {
-        // Save this item in the user's cache for accessing later
-        cache.products[d.id] = d;
-        return {
-            id: d.id,
-            title: d.title,
-            price: d.price,
-            photos: d.photos,
-            date: d.date
-        }
-    }).slice(paginationStart, paginationStart + limit)
+    let pKey = null;
+    if (req.query.paginationKey && req.query.paginationKey !== 'null' && req.query.paginationKey !== 'undefined') {
+        pKey = JSON.parse(req.query.paginationKey as string);
+    }
+    else if (req.query.paginationKey === 'undefined') {
+        res.send({ listings: [], paginationKey: undefined });
+        return;
+    }
 
-    let listings = descending ? data.reverse() : data;
-    res.send({ paginationIdx: paginationStart + limit, listings });
+    database.getProducts(limit, descending, pKey)
+        .then((data: any) => {
+            data.Items.map((d: IProduct) => {
+                // Save this item in the user's cache for accessing later
+                if (!req.session.products) {
+                    req.session.products = {};
+                    req.session.save(() => {
+                        req.session.products[d.id] = d;
+                    })
+                }
+                else {
+                    req.session.products[d.id] = d;
+                }
+                return {
+                    id: d.id,
+                    title: d.title,
+                    price: d.price,
+                    photos: d.photos,
+                    date: d.date
+                }
+            })
+            let paginationKey = data.LastEvaluatedKey;
+
+            res.send({ listings: data.Items, paginationKey: paginationKey });
+        })
 })
 
-app.get("/api/product", (req, res) => {
-    let id = req.query.id;
+app.get("/api/product", (req: IRequest, res) => {
+    let id: string = req.query.id as string;
 
     let data = {}
     // Check cache
-    if (cache.products?.id) {
-        data = cache.products.id
+    if (req.session.products[id]) {
+        data = req.session.products[id]
+        res.send(data);
     }
     // Query database if not in cache
     else {
-        data = Database.Products.find(l => l.id == id)
+        database.getProductById(id)
+            .then(data => {
+                res.send(data);
+            })
     }
-
-    res.send(data);
 })
 
 app.get("/admin/home", (req, res) => {
@@ -126,7 +130,7 @@ app.post("/admin/listings/new", upload.any(), (req, res) => {
 
         let s3File = `${id}-${i}.${extension}`;
         s3Files.push(s3File);
-        uploadPhoto(photo.buffer, s3File);
+        database.uploadPhoto(photo.buffer, s3File);
     }
 
     let price = isNaN(parseFloat(req.body.price)) ? null : parseFloat(req.body.price)
@@ -142,7 +146,7 @@ app.post("/admin/listings/new", upload.any(), (req, res) => {
         hideChakras: req.body.hideChakras,
         hideBenefits: req.body.hideBenefits
     }
-    createProduct(productInfo, id, s3Files)
+    database.createProduct(productInfo, id, s3Files)
         .then(created => {
             if (created) {
                 let newStones = [];
@@ -159,7 +163,7 @@ app.post("/admin/listings/new", upload.any(), (req, res) => {
                 if (newStones.length > 0 || newBenefits.length > 0) {
                     lists.stones.push(...newStones);
                     lists.benefits.push(...newBenefits);
-                    updateLists(lists.stones, lists.benefits);
+                    database.updateLists(lists.stones, lists.benefits);
                 }
             }
         })
@@ -170,7 +174,7 @@ app.get("/admin/lists", (req, res) => {
         res.send({ stones: lists.stones, benefits: lists.benefits });
     }
     else {
-        getLists()
+        database.getLists()
             .then(data => {
                 if (lists.stones.length === 0) {
                     lists.stones = data.stones;
@@ -186,7 +190,7 @@ app.get("/admin/lists", (req, res) => {
 app.get("/admin/:adminToken", (req: IRequest, res) => {
     let token = req.params.adminToken;
 
-    verifyAdminToken(token)
+    database.verifyAdminToken(token)
         .then(verification => {
             if (verification) {
                 req.session.adminToken = verification;
@@ -217,13 +221,13 @@ app.post("/admin/register", (req: IRequest, res) => {
         }
     }
 
-    getUser(username)
+    database.getUser(username)
         .then(user => {
             if (user) {
                 res.redirect('/admin/' + req.session.adminToken);
             }
             else {
-                createUser({
+                database.createUser({
                     username: username,
                     password: password,
                     firstname: firstname,
@@ -236,7 +240,7 @@ app.post("/admin/register", (req: IRequest, res) => {
                             req.session.save(() => {
                                 res.redirect('/admin/home');
                             })
-                            removeAdminToken(req.session.adminToken);
+                            database.removeAdminToken(req.session.adminToken);
                         }
                         else {
                             res.send('Admin creation failed. Please try again in a minute or contact developer');

@@ -31,10 +31,12 @@ export interface IProduct extends IListing {
 
 export async function getAllListings(descending: boolean = false, limit?: number): Promise<IListing[]> {
     let limitParam = limit ? limit : '';
+    // No more listings to load
+    if (cache.getPaginationKey() === undefined) return [];
 
     cache.isPolling(true);
 
-    return fetch(`/api/allproducts?descending=${descending}&limit=${limitParam}&paginationIdx=${cache.getPaginationIdx()}`)
+    return fetch(`/api/allproducts?descending=${descending}&limit=${limitParam}&paginationKey=${cache.getPaginationKey()}`)
         .then(response => {
             return response.json();
         })
@@ -42,7 +44,7 @@ export async function getAllListings(descending: boolean = false, limit?: number
             cache.isPolling(false);
             cache.setPollBuffer(200);
             // Parse data
-            cache.setPaginationIdx(json.paginationIdx);
+            cache.setPaginationKey(json.paginationKey);
 
             let data: IListing[] = json.listings;
             return data;
