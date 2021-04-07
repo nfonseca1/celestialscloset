@@ -32,6 +32,7 @@ let database: {
     updateLists?: (stones: string[], benefits: string[]) => void,
     createProduct?: (productInfo: IProductInfoList, id: string, files: string[]) => Promise<boolean>,
     updateProduct?: (productInfo: IProductInfoList, id: string, files: string[]) => Promise<boolean>,
+    deleteProduct?: (id: string) => Promise<boolean>,
     getUser?: (username: string) => Promise<any>,
     createUser?: (user: INewUser) => Promise<IUser>,
     getProducts?: (limit: number, descending: boolean, inActive: boolean, paginationKey?: any) => Promise<any>,
@@ -260,6 +261,24 @@ database.updateProduct = (productInfo: IProductInfoList, id: string, files: stri
         })
         .catch(e => {
             console.error(`Could not update product with id: ${id} \n`, e);
+            return false;
+        })
+}
+
+database.deleteProduct = (id: string): Promise<boolean> => {
+    let deleteParams = {
+        TableName: 'Products',
+        Key: {
+            id: id
+        }
+    }
+    return dbClient.delete(deleteParams).promise()
+        .then(data => {
+            console.log(`Successfully deleted product of id: ${id}`);
+            return true;
+        })
+        .catch(e => {
+            console.error(`Failed to delete product of id: ${id} \n`, e);
             return false;
         })
 }

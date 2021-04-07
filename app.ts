@@ -160,6 +160,14 @@ app.post("/admin/listings/new", upload.any(), (req, res) => {
     })
 })
 
+app.post("/admin/listings/delete", (req, res) => {
+    let id = req.body.id;
+    database.deleteProduct(id)
+        .then(() => {
+            res.redirect("/admin/home");
+        })
+})
+
 app.get("/admin/lists", (req, res) => {
     if (lists.stones.length > 0 && lists.benefits.length > 0) {
         res.send({ stones: lists.stones, benefits: lists.benefits });

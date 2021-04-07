@@ -1,0 +1,48 @@
+@import 'globals';
+
+.DeleteConfirmation {
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    top: 0;
+    left: 0;
+    z-index: 100;
+    background-color: rgba(0,0,0,.6);
+
+    .dialog-box {
+        position: fixed;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        width: 40vw;
+        height: 40vh;
+        top: 30vh;
+        left: 30vw;
+        z-index: 110;
+        background-color: $bg-color;
+        padding: 5%;
+    }
+
+    .buttons {
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+        
+        button {
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 1vh;
+            cursor: pointer;
+        }
+
+        .delete {
+            background-color: #c54343;
+        }
+
+        .cancel {
+            background-color: #cacaca;
+            color: black;
+        }
+    }
+}

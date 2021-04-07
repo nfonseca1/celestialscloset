@@ -131,7 +131,7 @@ export default class PutListing extends React.Component<Props, State> {
         formData.append('stones', JSON.stringify(newListingData.stones));
         formData.append('chakras', JSON.stringify(newListingData.chakras));
         formData.append('benefits', JSON.stringify(newListingData.benefits));
-        formData.append('options', JSON.stringify(newListingData.options));
+        formData.append('options', JSON.stringify(newListingData.options || {}));
         for (let i = 0; i < newListingData.photos.length; i++) {
             formData.append(`photo ${i}`, newListingData.photos[i]);
         }

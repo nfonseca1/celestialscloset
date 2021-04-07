@@ -5,7 +5,8 @@ interface Props {
     id: string,
     photo: string,
     title: string,
-    price: number
+    price: number,
+    renderDeleteConfirmation: (id: string, title: string) => void
 }
 
 export default class AdminListing extends React.Component<Props> {
@@ -25,7 +26,7 @@ export default class AdminListing extends React.Component<Props> {
                     <Link to={`/admin/listings/new/${this.props.id}`}>
                         <div className="edit">Edit</div>
                     </Link>
-                    <div className="delete">Delete</div>
+                    <div className="delete" onClick={() => this.props.renderDeleteConfirmation(this.props.id, this.props.title)}>Delete</div>
                 </div>
             </div>
         )

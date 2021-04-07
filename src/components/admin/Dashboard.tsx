@@ -3,10 +3,12 @@ import { Link } from 'react-router-dom';
 import cache from '../../lib/cache';
 import { getAllListings, IListing } from '../../lib/database';
 import AdminListing from './AdminListing';
+import DeleteConfirmation from './DeleteConfirmation';
 
 interface State {
     listings: IListing[]
-    showingActive: boolean
+    showingActive: boolean,
+    deleteConfirmation: JSX.Element
 }
 
 export default class Dashboard extends React.Component<{}, State> {
@@ -14,7 +16,7 @@ export default class Dashboard extends React.Component<{}, State> {
         super(props);
 
         cache.setPaginationKey(null);
-        this.state = { listings: [], showingActive: true }
+        this.state = { listings: [], showingActive: true, deleteConfirmation: null }
 
         if (!cache.isPolling()) {
             getAllListings(true)
@@ -36,6 +38,9 @@ export default class Dashboard extends React.Component<{}, State> {
         this.setupObserver = this.setupObserver.bind(this);
         this.analyzeScroll = this.analyzeScroll.bind(this);
         this.switchActive = this.switchActive.bind(this);
+        this.renderDeleteConfirmation = this.renderDeleteConfirmation.bind(this);
+        this.hideDeleteConfirmation = this.hideDeleteConfirmation.bind(this);
+        this.deleteListing = this.deleteListing.bind(this);
     }
 
     setupObserver() {
@@ -71,11 +76,46 @@ export default class Dashboard extends React.Component<{}, State> {
             .catch(e => console.error(`Could not get all listings in collection \n`, e));
     }
 
+    renderDeleteConfirmation(id: string, title: string) {
+        this.setState({
+            deleteConfirmation: <DeleteConfirmation id={id} title={title} hideDeleteConfirmation={this.hideDeleteConfirmation} deleteListing={this.deleteListing} />
+        })
+    }
+
+    hideDeleteConfirmation() {
+        this.setState({
+            deleteConfirmation: null
+        })
+    }
+
+    deleteListing(id: string) {
+        fetch("/admin/listings/delete", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ id: id })
+        })
+        cache.setPaginationKey(null);
+        getAllListings(true, 15)
+            .then(listingsData => {
+                this.setState((state) => ({
+                    listings: listingsData || [],
+                    showingActive: true,
+                    deleteConfirmation: null
+                }), () => {
+                    cache.setPollBuffer(1000);
+                })
+                cache.setCache(listingsData);
+            })
+            .catch(e => console.error(`Could not get all listings in collection \n`, e));
+    }
+
     render() {
         setTimeout(() => this.setupObserver(), 200);
 
         let listingsJSX = this.state.listings.map(l => {
-            return <AdminListing id={l.id} photo={l.photos[0]?.link} title={l.title} price={l.price} key={l.id} />
+            return <AdminListing id={l.id} photo={l.photos[0]?.link} title={l.title} price={l.price} key={l.id} renderDeleteConfirmation={this.renderDeleteConfirmation} />
         })
 
         let listingsLabel: string = 'Active Listings';
@@ -88,7 +128,7 @@ export default class Dashboard extends React.Component<{}, State> {
         return (
             <div className="Dashboard">
                 <h1>Dashboard</h1>
-                <h2>Listings</h2>
+                <h2>{listingsLabel}</h2>
                 <div className="options">
                     <Link to="/admin/listings/new">
                         <button className="new-listing-btn">New Listing</button>
@@ -104,6 +144,7 @@ export default class Dashboard extends React.Component<{}, State> {
                 <div className="admin-listings">
                     {listingsJSX}
                 </div>
+                {this.state.deleteConfirmation}
             </div>
         )
     }
