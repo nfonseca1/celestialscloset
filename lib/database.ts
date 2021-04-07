@@ -34,7 +34,7 @@ let database: {
     updateProduct?: (productInfo: IProductInfoList, id: string, files: string[]) => Promise<boolean>,
     getUser?: (username: string) => Promise<any>,
     createUser?: (user: INewUser) => Promise<IUser>,
-    getProducts?: (limit: number, descending: boolean, paginationKey?: any) => Promise<any>,
+    getProducts?: (limit: number, descending: boolean, inActive: boolean, paginationKey?: any) => Promise<any>,
     getProductById?: (id: string) => Promise<any>
 } = {};
 
@@ -314,7 +314,7 @@ database.createUser = (user: INewUser): Promise<IUser> => {
         })
 }
 
-database.getProducts = (limit: number, descending: boolean, paginationKey?: any): Promise<any> => {
+database.getProducts = (limit: number, descending: boolean, inActive: boolean = false, paginationKey?: any): Promise<any> => {
     let getParams: any = {
         TableName: 'Products',
         IndexName: 'isActive-date-index',
@@ -325,7 +325,7 @@ database.getProducts = (limit: number, descending: boolean, paginationKey?: any)
             '#date': 'date'
         },
         ExpressionAttributeValues: {
-            ':hkey': 'true',
+            ':hkey': (!inActive).toString(),
             ':rkey': '0'
         }
     }

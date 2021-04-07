@@ -54,6 +54,7 @@ app.get("/api/allproducts", (req: IRequest, res) => {
             limit = parsedLimit;
         }
     }
+    let inActive = req.query.inActive === 'true';
 
     // Query database
     let pKey = null;
@@ -65,7 +66,7 @@ app.get("/api/allproducts", (req: IRequest, res) => {
         return;
     }
 
-    database.getProducts(limit, descending, pKey)
+    database.getProducts(limit, descending, inActive, pKey)
         .then((data: any) => {
             data.Items.map((d: IProduct) => {
                 return {
