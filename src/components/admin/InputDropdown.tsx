@@ -19,7 +19,7 @@ export default class InputDropdown extends React.Component<Props, State> {
     constructor(props: Props) {
         super(props);
 
-        this.state = { listItems: [], dropdownVisible: false, selections: [], inputValue: '' }
+        this.state = { listItems: [], dropdownVisible: false, selections: this.props.selections, inputValue: '' }
 
         getListItems()
             .then(lists => {
@@ -90,9 +90,6 @@ export default class InputDropdown extends React.Component<Props, State> {
         }
 
         let itemsData: string[] = this.state.selections;
-        if (itemsData.length === 0) {
-            itemsData = this.props.selections || [];
-        }
 
         return (
             <div className="stones">

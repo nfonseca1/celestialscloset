@@ -20,7 +20,7 @@ export default class AdminListing extends React.Component<Props> {
                     <img src={this.props.photo} />
                 </div>
                 <div className="title">{this.props.title}</div>
-                <div className="price">{this.props.price}</div>
+                <div className="price">${this.props.price}</div>
                 <div className="toolbar">
                     <Link to={`/admin/listings/new/${this.props.id}`}>
                         <div className="edit">Edit</div>

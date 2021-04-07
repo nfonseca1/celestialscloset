@@ -2,7 +2,7 @@ import * as React from 'react';
 import PhotoPicker from './PhotoPicker';
 import InputDropdown from './InputDropdown';
 import ChakraDropdown from './ChakraDropdown';
-import { match } from 'react-router';
+import { match, Redirect } from 'react-router';
 import { History, Location } from 'history';
 import newListingData from '../../lib/newListingData';
 import { getProductById } from '../../lib/database';
@@ -30,6 +30,7 @@ interface State {
         }
     },
     priceErr?: string,
+    redirect?: boolean
 }
 
 export default class PutListing extends React.Component<Props, State> {
@@ -46,7 +47,7 @@ export default class PutListing extends React.Component<Props, State> {
                         values: {
                             photos: vals.photos.map(p => p.link),
                             title: vals.title,
-                            price: vals.price.toString(),
+                            price: vals.price?.toString() || '',
                             description: vals.description,
                             isActive: vals.isActive === 'true',
                             stones: vals.details.stones.map(s => s.stone),
@@ -55,16 +56,15 @@ export default class PutListing extends React.Component<Props, State> {
                             options: vals.options
                         }
                     }, () => {
+                        newListingData.id = this.props.match.params.id;
                         newListingData.title = vals.title;
-                        newListingData.price = vals.price.toString();
+                        newListingData.price = vals.price?.toString() || '';
                         newListingData.description = vals.description;
                         newListingData.stones = vals.details.stones.map(s => s.stone);
                         newListingData.chakras = vals.details.chakras;
                         newListingData.benefits = vals.details.benefits;
                         newListingData.isActive = vals.isActive === 'true';
-                        newListingData.hideStones = vals.options.hideStones;
-                        newListingData.hideChakras = vals.options.hideChakras;
-                        newListingData.hideBenefits = vals.options.hideBenefits;
+                        newListingData.options = vals.options;
                     })
                 })
         }
@@ -90,25 +90,26 @@ export default class PutListing extends React.Component<Props, State> {
     }
 
     handleInactive(e: React.ChangeEvent) {
-        let status = (e.target as HTMLInputElement).value;
-        newListingData.isActive = status === 'on' ? false : true;
+        let status = (e.target as HTMLInputElement).checked;
+        newListingData.isActive = !status;
         this.setState((state) => ({
             values: {
                 ...state.values,
-                isActive: status === 'on' ? false : true
+                isActive: !status
             }
         }))
     }
 
     handleCheckbox(e: React.ChangeEvent, label: 'hideStones' | 'hideChakras' | 'hideBenefits') {
-        let status = (e.target as HTMLInputElement).value;
-        newListingData[label] = status === 'on' ? true : false;
+        let status = (e.target as HTMLInputElement).checked;
+        if (!newListingData.options) newListingData.options = {};
+        newListingData.options[label] = status;
         this.setState((state) => ({
             values: {
                 ...state.values,
                 options: {
                     ...state.values.options,
-                    [label]: status === 'on' ? true : false
+                    [label]: status
                 }
             }
         }))
@@ -122,6 +123,7 @@ export default class PutListing extends React.Component<Props, State> {
         }
         // Send newListingData with a formnewListingData instance (because of photo blobs)
         let formData = new FormData();
+        if (newListingData.id) formData.append('id', newListingData.id);
         formData.append('isActive', newListingData.isActive);
         formData.append('title', newListingData.title);
         formData.append('price', newListingData.price);
@@ -129,6 +131,7 @@ export default class PutListing extends React.Component<Props, State> {
         formData.append('stones', JSON.stringify(newListingData.stones));
         formData.append('chakras', JSON.stringify(newListingData.chakras));
         formData.append('benefits', JSON.stringify(newListingData.benefits));
+        formData.append('options', JSON.stringify(newListingData.options));
         for (let i = 0; i < newListingData.photos.length; i++) {
             formData.append(`photo ${i}`, newListingData.photos[i]);
         }
@@ -136,6 +139,9 @@ export default class PutListing extends React.Component<Props, State> {
         var request = new XMLHttpRequest();
         request.open("POST", "/admin/listings/new");
         request.send(formData);
+        this.setState({
+            redirect: true
+        })
     }
 
     handleChange(e: React.ChangeEvent, label: 'title' | 'price' | 'description') {
@@ -221,6 +227,9 @@ export default class PutListing extends React.Component<Props, State> {
                     <button className="listing-post-btn" onClick={this.handleSubmit}>Post</button>
                 </div>
             )
+        }
+        if (this.state.redirect) {
+            renderJSX = <Redirect to="/admin/home" />
         }
 
         return renderJSX;

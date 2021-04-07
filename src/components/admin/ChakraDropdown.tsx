@@ -25,7 +25,7 @@ export default class ChakraDropdown extends React.Component<Props, State> {
     constructor(props: Props) {
         super(props);
 
-        this.state = { dropdownVisible: false, selections: [] }
+        this.state = { dropdownVisible: false, selections: this.props.selections }
 
         this.toggleDropdown = this.toggleDropdown.bind(this);
         this.addToSelection = this.addToSelection.bind(this);
@@ -64,9 +64,6 @@ export default class ChakraDropdown extends React.Component<Props, State> {
         }
 
         let itemsData: string[] = this.state.selections;
-        if (itemsData.length === 0) {
-            itemsData = this.props.selections || [];
-        }
 
         return (
             <div className="chakras">

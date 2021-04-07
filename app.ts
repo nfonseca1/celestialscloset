@@ -124,34 +124,39 @@ app.post("/admin/listings/new", upload.any(), (req, res) => {
         stones: JSON.parse(req.body.stones),
         chakras: JSON.parse(req.body.chakras),
         benefits: JSON.parse(req.body.benefits),
-        hideStones: req.body.hideStones,
-        hideChakras: req.body.hideChakras,
-        hideBenefits: req.body.hideBenefits
+        options: JSON.parse(req.body.options)
     }
     // Add the price if there is one set
     if (price) productInfo.price = price;
 
-    database.createProduct(productInfo, id, s3Files)
-        .then(created => {
-            if (created) {
-                let newStones = [];
-                for (let stone of productInfo.stones) {
-                    let valid = validateNewListItem(lists.stones, stone);
-                    if (valid) newStones.push(valid);
-                }
-                let newBenefits = [];
-                for (let benefit of productInfo.benefits) {
-                    let valid = validateNewListItem(lists.benefits, benefit);
-                    if (valid) newBenefits.push(valid);
-                }
+    let dbAction;
+    if (req.body.id) {
+        dbAction = database.updateProduct(productInfo, id, s3Files);
+    }
+    else {
+        dbAction = database.createProduct(productInfo, id, s3Files);
+    }
 
-                if (newStones.length > 0 || newBenefits.length > 0) {
-                    lists.stones.push(...newStones);
-                    lists.benefits.push(...newBenefits);
-                    database.updateLists(lists.stones, lists.benefits);
-                }
+    dbAction.then((created: boolean) => {
+        if (created) {
+            let newStones = [];
+            for (let stone of productInfo.stones) {
+                let valid = validateNewListItem(lists.stones, stone);
+                if (valid) newStones.push(valid);
             }
-        })
+            let newBenefits = [];
+            for (let benefit of productInfo.benefits) {
+                let valid = validateNewListItem(lists.benefits, benefit);
+                if (valid) newBenefits.push(valid);
+            }
+
+            if (newStones.length > 0 || newBenefits.length > 0) {
+                lists.stones.push(...newStones);
+                lists.benefits.push(...newBenefits);
+                database.updateLists(lists.stones, lists.benefits);
+            }
+        }
+    })
 })
 
 app.get("/admin/lists", (req, res) => {

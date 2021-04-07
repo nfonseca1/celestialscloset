@@ -1,5 +1,5 @@
 import { Credentials, S3, DynamoDB } from 'aws-sdk';
-import { v4 as uuidv4 } from 'uuid';
+import { stringify, v4 as uuidv4 } from 'uuid';
 import bcrypt from 'bcrypt';
 import dotenv from 'dotenv';
 import { IProduct, IUser, IComment, IProductInfoList } from './schemas';
@@ -31,6 +31,7 @@ let database: {
     getLists?: () => Promise<any>,
     updateLists?: (stones: string[], benefits: string[]) => void,
     createProduct?: (productInfo: IProductInfoList, id: string, files: string[]) => Promise<boolean>,
+    updateProduct?: (productInfo: IProductInfoList, id: string, files: string[]) => Promise<boolean>,
     getUser?: (username: string) => Promise<any>,
     createUser?: (user: INewUser) => Promise<IUser>,
     getProducts?: (limit: number, descending: boolean, paginationKey?: any) => Promise<any>,
@@ -164,11 +165,6 @@ database.createProduct = (productInfo: IProductInfoList, id: string, files: stri
         return { stone: stone }
     })
 
-    let options: any = {}
-    if (productInfo.hideStones) options.hideStones = productInfo.hideStones;
-    if (productInfo.hideChakras) options.hideChakras = productInfo.hideChakras;
-    if (productInfo.hideBenefits) options.hideBenefits = productInfo.hideBenefits;
-
     let putParams = {
         TableName: 'Products',
         Item: {
@@ -184,7 +180,7 @@ database.createProduct = (productInfo: IProductInfoList, id: string, files: stri
                 chakras: productInfo.chakras,
                 benefits: productInfo.benefits
             },
-            options: options
+            options: productInfo.options
         }
     }
 
@@ -195,6 +191,75 @@ database.createProduct = (productInfo: IProductInfoList, id: string, files: stri
         })
         .catch(e => {
             console.error(`Could not create new product with id: ${id} \n`, e);
+            return false;
+        })
+}
+
+database.updateProduct = (productInfo: IProductInfoList, id: string, files: string[]): Promise<boolean> => {
+    let photos = files.map(file => {
+        return { link: `https://${process.env.BUCKET}.s3.amazonaws.com/photos/${file}` };
+    })
+    let stones = productInfo.stones.map((stone: string) => {
+        return { stone: stone }
+    })
+
+    interface IPutParams {
+        TableName: string,
+        Key: { id: string },
+        UpdateExpression: string,
+        ExpressionAttributeNames: any,
+        ExpressionAttributeValues: any
+    }
+
+    let putParams: IPutParams = {
+        TableName: 'Products',
+        Key: {
+            id: id
+        },
+        UpdateExpression: 'set #title = :title, #description = :description, #isActive = :isActive, #details = :details, #options = :options',
+        ExpressionAttributeNames: {
+            '#title': 'title',
+            '#description': 'description',
+            '#isActive': 'isActive',
+            '#details': 'details',
+            '#options': 'options'
+        },
+        ExpressionAttributeValues: {
+            ':title': productInfo.title,
+            ':description': productInfo.description,
+            ':isActive': productInfo.isActive,
+            ':details': {
+                stones: stones,
+                chakras: productInfo.chakras,
+                benefits: productInfo.benefits
+            },
+            ':options': productInfo.options
+        }
+    }
+
+    if (productInfo.price) {
+        putParams.UpdateExpression += ', #price = :price';
+        putParams.ExpressionAttributeNames['#price'] = 'price';
+        putParams.ExpressionAttributeValues[':price'] = productInfo.price;
+    }
+    else {
+        putParams.UpdateExpression += ' remove #price';
+        putParams.ExpressionAttributeNames['#price'] = 'price';
+    }
+
+    if (photos.length > 0) {
+        putParams.UpdateExpression += ', #photos = :photos';
+        putParams.ExpressionAttributeNames['#photos'] = 'photos';
+        putParams.ExpressionAttributeValues[':photos'] = photos;
+    }
+
+    return dbClient.update(putParams).promise()
+        .then(data => {
+            console.log(`Successfully updated product with id: ${id}`);
+            return true;
+        })
+        .catch(e => {
+            console.error(`Could not update product with id: ${id} \n`, e);
             return false;
         })
 }

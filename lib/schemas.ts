@@ -54,7 +54,9 @@ export interface IProductInfoList {
     chakras: string[],
     benefits: string[],
     isActive?: boolean,
-    hideStones?: boolean,
-    hideChakras?: boolean,
-    hideBenefits?: boolean
+    options?: {
+        hideStones?: boolean,
+        hideChakras?: boolean,
+        hideBenefits?: boolean
+    }
 }

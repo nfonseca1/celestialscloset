@@ -58,7 +58,7 @@ export default class Dashboard extends React.Component<{}, State> {
         setTimeout(() => this.setupObserver(), 200);
 
         let listingsJSX = this.state.listings.map(l => {
-            return <AdminListing id={l.id} photo={l.photos[0].link} title={l.title} price={l.price} key={l.id} />
+            return <AdminListing id={l.id} photo={l.photos[0]?.link} title={l.title} price={l.price} key={l.id} />
         })
 
         return (
