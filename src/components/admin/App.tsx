@@ -12,9 +12,18 @@ export default class App extends React.Component {
                         <Route path="/admin/home">
                             <Dashboard />
                         </Route>
-                        <Route path="/admin/listings/new">
-                            <PutListing />
-                        </Route>
+                        <Route
+                            exact path="/admin/listings/new"
+                            render={routeProps => (
+                                <PutListing {...routeProps} />
+                            )}
+                        />
+                        <Route
+                            path="/admin/listings/new/:id"
+                            render={routeProps => (
+                                <PutListing {...routeProps} />
+                            )}
+                        />
                     </Switch>
                 </Router>
                 <div className="footer">&copy; 2021 Nathan Fonseca</div>

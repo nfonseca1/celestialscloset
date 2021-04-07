@@ -2,6 +2,10 @@ import * as React from 'react';
 import SelectionList from './SelectionList';
 import data from '../../lib/newListingData';
 
+interface Props {
+    selections: string[]
+}
+
 interface State {
     dropdownVisible: boolean,
     selections: string[]
@@ -17,8 +21,8 @@ enum Chakras {
     Crown = "Crown"
 }
 
-export default class ChakraDropdown extends React.Component<{}, State> {
-    constructor(props: {}) {
+export default class ChakraDropdown extends React.Component<Props, State> {
+    constructor(props: Props) {
         super(props);
 
         this.state = { dropdownVisible: false, selections: [] }
@@ -59,6 +63,11 @@ export default class ChakraDropdown extends React.Component<{}, State> {
             display: this.state.dropdownVisible ? 'inline-block' : 'none'
         }
 
+        let itemsData: string[] = this.state.selections;
+        if (itemsData.length === 0) {
+            itemsData = this.props.selections || [];
+        }
+
         return (
             <div className="chakras">
                 <div className="dropdown-btn" onClick={this.toggleDropdown}>Select Chakras</div>
@@ -71,7 +80,7 @@ export default class ChakraDropdown extends React.Component<{}, State> {
                     <div className="list-item" id="third eye" onClick={() => this.addToSelection(Chakras['Third Eye'])}>Third Eye</div>
                     <div className="list-item" id="crown" onClick={() => this.addToSelection(Chakras.Crown)}>Crown</div>
                 </div>
-                <SelectionList items={this.state.selections} removeSelection={this.removeSelection} />
+                <SelectionList items={itemsData} removeSelection={this.removeSelection} />
             </div>
         )
     }

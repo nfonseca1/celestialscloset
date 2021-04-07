@@ -1,5 +1,4 @@
 import { Request } from 'express';
-import { Session } from 'express-session';
 
 export interface IProduct {
     id: string,
@@ -9,10 +8,10 @@ export interface IProduct {
         link: string,
         crop?: { x: number, y: number }
     }[],
-    date: number,
+    date: string,
     description: string,
     likes?: number,
-    active?: number,
+    isActive?: string,
     details?: {
         stones?: {
             stone: string,
@@ -49,12 +48,12 @@ export interface IRequest extends Request {
 
 export interface IProductInfoList {
     title: string,
-    price: number,
+    price?: number,
     description: string,
     stones: string[],
     chakras: string[],
     benefits: string[],
-    inactive?: boolean,
+    isActive?: boolean,
     hideStones?: boolean,
     hideChakras?: boolean,
     hideBenefits?: boolean

@@ -3,6 +3,7 @@ let data: any = {
     title: '',
     price: null,
     description: '',
+    isActive: true,
     stones: [],
     chakras: [],
     benefits: []

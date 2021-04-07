@@ -3,7 +3,8 @@ import cache from './cache';
 export interface IListing {
     id: string,
     title: string,
-    price: number,
+    price?: number,
+    isActive: string,
     photos: {
         link: string,
         crop?: {
@@ -15,7 +16,7 @@ export interface IListing {
 }
 
 export interface IProduct extends IListing {
-    description: string,
+    description?: string,
     likes?: number,
     details?: {
         stones?: {
@@ -25,7 +26,11 @@ export interface IProduct extends IListing {
         chakras?: string[];
         benefits?: string[];
     },
-    options?: {}
+    options?: {
+        hideStones?: boolean,
+        hideChakras?: boolean,
+        hideBenefits?: boolean
+    }
 }
 
 
@@ -43,7 +48,7 @@ export async function getAllListings(descending: boolean = false, limit?: number
         .then(json => {
             cache.isPolling(false);
             cache.setPollBuffer(200);
-            // Parse data
+
             cache.setPaginationKey(json.paginationKey);
 
             let data: IListing[] = json.listings;

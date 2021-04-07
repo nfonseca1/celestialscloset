@@ -1,15 +1,22 @@
 import * as React from 'react';
 import data from '../../lib/newListingData';
 
+interface Props {
+    photos: string[]
+}
+
 interface State {
     previews: JSX.Element[]
 }
 
-export default class PhotoPicker extends React.Component<{}, State> {
-    constructor(props: {}) {
+export default class PhotoPicker extends React.Component<Props, State> {
+    constructor(props: Props) {
         super(props);
 
-        this.state = { previews: [] }
+        this.state = {
+            previews: []
+        }
+
 
         this.handleSelection = this.handleSelection.bind(this);
     }
@@ -49,14 +56,21 @@ export default class PhotoPicker extends React.Component<{}, State> {
     }
 
     render() {
+        let previews: JSX.Element[] = this.state.previews;
+        if (previews.length === 0) {
+            previews = this.props.photos?.map(p => {
+                return <img src={p as string} className="preview" key={p} />
+            }) || []
+        }
+
         return (
             <div className="PhotoPicker">
                 <div className="heading">Photos</div>
                 <div className="input-description">Select up to 10 photos. The order you select them in will be the order they display in.</div>
                 <button type="button" className="upload-input-btn" onClick={this.handleUploadClick}>Select Images</button>
-                <span>{this.state.previews.length} Images</span>
+                <span>{previews.length} Images</span>
                 <input className="upload-input" type="file" accept=".jpg, .jpeg, .png" multiple onChange={this.handleSelection}></input>
-                <div className="image-previews">{this.state.previews}</div>
+                <div className="image-previews">{previews}</div>
             </div>
         )
     }

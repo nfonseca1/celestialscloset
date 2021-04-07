@@ -68,16 +68,6 @@ app.get("/api/allproducts", (req: IRequest, res) => {
     database.getProducts(limit, descending, pKey)
         .then((data: any) => {
             data.Items.map((d: IProduct) => {
-                // Save this item in the user's cache for accessing later
-                if (!req.session.products) {
-                    req.session.products = {};
-                    req.session.save(() => {
-                        req.session.products[d.id] = d;
-                    })
-                }
-                else {
-                    req.session.products[d.id] = d;
-                }
                 return {
                     id: d.id,
                     title: d.title,
@@ -95,19 +85,11 @@ app.get("/api/allproducts", (req: IRequest, res) => {
 app.get("/api/product", (req: IRequest, res) => {
     let id: string = req.query.id as string;
 
-    let data = {}
-    // Check cache
-    if (req.session.products[id]) {
-        data = req.session.products[id]
-        res.send(data);
-    }
-    // Query database if not in cache
-    else {
-        database.getProductById(id)
-            .then(data => {
-                res.send(data);
-            })
-    }
+    database.getProductById(id)
+        .then(data => {
+            res.send(data);
+        })
+
 })
 
 app.get("/admin/home", (req, res) => {
@@ -119,7 +101,8 @@ app.get("/admin/listings/new", (req, res) => {
 })
 
 app.post("/admin/listings/new", upload.any(), (req, res) => {
-    let id = uuidv4();
+    let id = req.body.id || uuidv4();
+
     let s3Files = [];
     for (let i = 0; i < req.files.length; i++) {
         let photo = (req.files as any)[i];
@@ -135,9 +118,8 @@ app.post("/admin/listings/new", upload.any(), (req, res) => {
 
     let price = isNaN(parseFloat(req.body.price)) ? null : parseFloat(req.body.price)
     let productInfo: IProductInfoList = {
-        inactive: req.body.inactive,
+        isActive: req.body.isActive,
         title: req.body.title,
-        price: price,
         description: req.body.description,
         stones: JSON.parse(req.body.stones),
         chakras: JSON.parse(req.body.chakras),
@@ -146,6 +128,9 @@ app.post("/admin/listings/new", upload.any(), (req, res) => {
         hideChakras: req.body.hideChakras,
         hideBenefits: req.body.hideBenefits
     }
+    // Add the price if there is one set
+    if (price) productInfo.price = price;
+
     database.createProduct(productInfo, id, s3Files)
         .then(created => {
             if (created) {

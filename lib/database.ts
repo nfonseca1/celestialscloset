@@ -173,7 +173,7 @@ database.createProduct = (productInfo: IProductInfoList, id: string, files: stri
         TableName: 'Products',
         Item: {
             id: id,
-            isActive: productInfo.inactive ? 'false' : 'true',
+            isActive: productInfo.isActive ? 'true' : 'false',
             date: Date.now().toString(),
             title: productInfo.title,
             price: productInfo.price,
@@ -252,6 +252,7 @@ database.createUser = (user: INewUser): Promise<IUser> => {
 database.getProducts = (limit: number, descending: boolean, paginationKey?: any): Promise<any> => {
     let getParams: any = {
         TableName: 'Products',
+        IndexName: 'isActive-date-index',
         Limit: limit,
         ScanIndexForward: !descending,
         KeyConditionExpression: 'isActive = :hkey and #date > :rkey',
@@ -274,14 +275,12 @@ database.getProducts = (limit: number, descending: boolean, paginationKey?: any)
 database.getProductById = (id: string): Promise<any> => {
     let getParams = {
         TableName: 'Products',
-        IndexName: 'isActive-id-index',
-        KeyConditionExpression: 'isActive = :hkey and #id > :rkey',
+        KeyConditionExpression: '#id = :hkey',
         ExpressionAttributeNames: {
             '#id': 'id'
         },
         ExpressionAttributeValues: {
-            ':hkey': 'true',
-            ':rkey': id
+            ':hkey': id
         }
     }
     return dbClient.query(getParams).promise()

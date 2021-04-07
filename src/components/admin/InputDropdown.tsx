@@ -4,7 +4,8 @@ import data from '../../lib/newListingData';
 import { getListItems } from '../../lib/database';
 
 interface Props {
-    label: 'stones' | 'benefits'
+    label: 'stones' | 'benefits',
+    selections: string[]
 }
 
 interface State {
@@ -82,6 +83,16 @@ export default class InputDropdown extends React.Component<Props, State> {
         let items: JSX.Element[] = this.state.listItems.map(l => {
             return <div className="list-item" id={l} key={l + '-item'} onClick={() => this.addToSelection(l)}>{l}</div>
         })
+        if (items?.length === 0) {
+            items = this.props.selections?.map(l => {
+                return <div className="list-item" id={l} key={l + '-item'} onClick={() => this.addToSelection(l)}>{l}</div>
+            })
+        }
+
+        let itemsData: string[] = this.state.selections;
+        if (itemsData.length === 0) {
+            itemsData = this.props.selections || [];
+        }
 
         return (
             <div className="stones">
@@ -90,7 +101,7 @@ export default class InputDropdown extends React.Component<Props, State> {
                     <button type="button" className="dropdown-btn" onClick={() => this.addToSelection(this.state.inputValue)}>Add</button>
                 </div>
                 <div className="dropdown" style={style}>{items}</div>
-                <SelectionList items={this.state.selections} removeSelection={this.removeSelection} />
+                <SelectionList items={itemsData} removeSelection={this.removeSelection} />
             </div>
         )
     }

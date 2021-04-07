@@ -34,7 +34,7 @@ export default class Collection extends React.Component<{}, State> {
     }
 
     setupObserver() {
-        let observer = new IntersectionObserver(this.analyzeScroll, { rootMargin: '50%' });
+        let observer = new IntersectionObserver(this.analyzeScroll, { rootMargin: '40%' });
         observer.observe(document.querySelector(".footer"));
     }
 
