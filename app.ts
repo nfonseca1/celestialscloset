@@ -4,6 +4,7 @@ import session from 'express-session';
 import memorystore from 'memorystore';
 import multer from 'multer';
 import { v4 as uuidv4 } from 'uuid';
+import bcrypt from 'bcrypt';
 import { IProduct, IUser, IComment, IRequest, IProductInfoList } from "./lib/schemas";
 import database from './lib/database';
 import { validateName, validatePassword, validateUsername, validateNewListItem } from './lib/validation';
@@ -13,6 +14,8 @@ app.use(express.json({ limit: '100mb' }));
 app.use(express.urlencoded({ extended: true, limit: '100mb' }));
 app.use(favicon(__dirname + "/favicon.png"));
 app.use(express.static(__dirname + "/dist/"));
+
+
 
 let upload = multer();
 
@@ -93,12 +96,22 @@ app.get("/api/product", (req: IRequest, res) => {
 
 })
 
-app.get("/admin/home", (req, res) => {
-    res.sendFile(__dirname + "/dist/admin.html");
+app.get("/admin/home", (req: IRequest, res) => {
+    if (!req.session.user) {
+        res.redirect("/admin");
+    }
+    else {
+        res.sendFile(__dirname + "/dist/admin.html");
+    }
 })
 
-app.get("/admin/listings/new", (req, res) => {
-    res.sendFile(__dirname + "/dist/admin.html");
+app.get("/admin/listings/new", (req: IRequest, res) => {
+    if (!req.session.user) {
+        res.redirect("/admin");
+    }
+    else {
+        res.sendFile(__dirname + "/dist/admin.html");
+    }
 })
 
 app.post("/admin/listings/new", upload.any(), (req, res) => {
@@ -250,7 +263,34 @@ app.post("/admin/register", (req: IRequest, res) => {
 })
 
 app.get("/admin", (req, res) => {
-    res.send("Admin Login");
+    res.sendFile(__dirname + "/dist/adminLogin.html");
+})
+
+app.post("/admin", (req: IRequest, res) => {
+    let username = req.body.username;
+
+    database.getUser(username)
+        .then(data => {
+            if (data?.username) {
+                bcrypt.compare(req.body.password, data.passwordHash)
+                    .then(match => {
+                        if (match) {
+                            req.session.user = data;
+                            res.redirect("/admin/home");
+                        }
+                        else {
+                            res.redirect("/admin");
+                        }
+                    })
+            }
+            else {
+                res.redirect("/admin");
+            }
+        })
+        .catch(e => {
+            console.error(`Failed to check user with username: ${username} \n`, e);
+            res.send("An error occurred. Please try again in a minute or contact the developer if the issue persists.");
+        })
 })
 
 app.get("/p/*", (req, res) => {

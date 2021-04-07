@@ -103,7 +103,7 @@ class AdminRegistration extends React.Component<{}, State> {
 
     render() {
         return (
-            <div className="AdminRegistration">
+            <div className="AdminLogin">
                 <h1>Admin Account Registration</h1>
 
                 <form action="/admin/register" method="POST">

@@ -7,6 +7,7 @@ module.exports = {
         home: "./src/home.tsx",
         collection: "./src/collection.tsx",
         adminRegistration: "./src/adminRegistration.tsx",
+        adminLogin: "./src/adminLogin.tsx",
         dashboard: "./src/dashboard.tsx"
     },
     output: {
@@ -80,6 +81,12 @@ module.exports = {
             template: 'admin.html',
             filename: 'adminRegistration.html',
             chunks: ['adminRegistration']
+        }),
+        new HTMLWebpackPlugin({
+            inject: 'body',
+            template: 'admin.html',
+            filename: 'adminLogin.html',
+            chunks: ['adminLogin']
         }),
         new HTMLWebpackPlugin({
             inject: 'body',
