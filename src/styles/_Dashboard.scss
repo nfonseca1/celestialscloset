@@ -5,8 +5,26 @@
     width: 100%;
     padding: 10vh 10%;
 
+    @media screen and (orientation: portrait) {
+        width: 100vw;
+        padding: 5vh 2%;
+    }
+
     h1 {
         margin-bottom: 10vh;
+
+        @media screen and (orientation: portrait) {
+            font-size: 5vw;
+            text-align: center;
+        }
+    }
+
+    h2 {
+        margin-bottom: 2vh;
+
+        @media screen and (orientation: portrait) {
+            font-size: 4vw;
+        }
     }
 
     .listings-header {
@@ -17,6 +35,11 @@
         background-color: darken($bg-color, 5%);
         margin-top: 2vh;
 
+        @media screen and (orientation: portrait) {
+            height: 5vw;
+            font-size: 3vw;
+        }
+
         div {
             text-align: left;
         }
@@ -25,6 +48,10 @@
     .image-container {
         height: 100%;
         width: 10%;
+
+        @media screen and (orientation: portrait) {
+            width: 12%;
+        }
 
         img {
             height: 100%;
@@ -40,6 +67,12 @@
         height: 10vh;
         background-color: darken($bg-color, 5%);
         margin-top: 2vh;
+
+        @media screen and (orientation: portrait) {
+            height: 12vw;
+            font-size: 3vw;
+            margin-top: 4vw;
+        }
     }
 
     .title {
@@ -78,6 +111,15 @@
         display: flex;
         justify-content: space-between;
         width: 100%;
+
+        @media screen and (orientation: portrait) {
+            font-size: 3vw;
+
+            button {
+                font-size: 3vw;
+                padding: 1vw;
+            }
+        }
 
         span {
             cursor: pointer;
