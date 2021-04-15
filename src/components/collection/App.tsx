@@ -2,10 +2,10 @@ import * as React from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import Helmet from 'react-helmet';
 import Navbar from "../Navbar";
-import Product from "../Product";
 import Collection from "./Collection";
-import Instagram from "../Instagram";
 import Photo from "../Photo";
+const Product = React.lazy(() => import("../Product"));
+const Instagram = React.lazy(() => import("../Instagram"));
 
 export default class App extends React.Component<{}, { photo: JSX.Element }> {
     constructor(props: {}) {
@@ -50,14 +50,18 @@ export default class App extends React.Component<{}, { photo: JSX.Element }> {
                                 <div>
                                     <Navbar context={'Collection'} />
                                     <Collection />
-                                    <Product {...routeProps} context={'Collection'} showFullPhoto={this.showFullPhoto} />
+                                    <React.Suspense fallback={<div>Loading...</div>}>
+                                        <Product {...routeProps} context={'Collection'} showFullPhoto={this.showFullPhoto} />
+                                    </React.Suspense>
                                 </div>
                             )}
                         />
                         <Route path="/instagram">
                             <Navbar context={'Collection'} />
                             <Collection />
-                            <Instagram context={'Collection'} />
+                            <React.Suspense fallback={<div>Loading...</div>}>
+                                <Instagram context={'Collection'} />
+                            </React.Suspense>
                         </Route>
                     </Switch>
                 </Router>

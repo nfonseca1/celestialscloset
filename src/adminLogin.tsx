@@ -2,7 +2,7 @@ import * as React from 'react';
 import ReactDOM from 'react-dom';
 import Input from './components/admin/Input';
 import { validateUsername, validateName, validatePassword } from './lib/validation';
-import './styles/styles.scss';
+import './styles/admin.scss';
 
 interface State {
     username?: string,

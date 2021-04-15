@@ -44,7 +44,7 @@ module.exports = {
                     {
                         loader: "file-loader",
                         options: {
-                            name: "styles.css"
+                            name: "[name].css"
                         }
                     },
                     "sass-loader"

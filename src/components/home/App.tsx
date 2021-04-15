@@ -3,9 +3,9 @@ import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import Helmet from 'react-helmet';
 import Navbar from "../Navbar";
 import Home from "./Home";
-import Product from "../Product";
-import Instagram from "../Instagram";
 import Photo from "../Photo";
+const Product = React.lazy(() => import("../Product"));
+const Instagram = React.lazy(() => import("../Instagram"));
 
 export default class App extends React.Component<{}, { photo: JSX.Element }> {
     constructor(props: {}) {
@@ -47,14 +47,18 @@ export default class App extends React.Component<{}, { photo: JSX.Element }> {
                                 <div>
                                     <Navbar context={'Home'} />
                                     <Home />
-                                    <Product {...routeProps} context={'Home'} showFullPhoto={this.showFullPhoto} />
+                                    <React.Suspense fallback={<div>Loading...</div>}>
+                                        <Product {...routeProps} context={'Home'} showFullPhoto={this.showFullPhoto} />
+                                    </React.Suspense>
                                 </div>
                             )}
                         />
                         <Route path="/instagram">
-                            <Navbar context={'Collection'} />
+                            <Navbar context={'Home'} />
                             <Home />
-                            <Instagram context={'Home'} />
+                            <React.Suspense fallback={<div>Loading...</div>}>
+                                <Instagram context={'Home'} />
+                            </React.Suspense>
                         </Route>
                     </Switch>
                 </Router>
