@@ -2,7 +2,7 @@ const path = require("path");
 const HTMLWebpackPlugin = require("html-webpack-plugin");
 
 module.exports = {
-    mode: "development",
+    mode: "production",
     entry: {
         home: "./src/home.tsx",
         collection: "./src/collection.tsx",
@@ -52,7 +52,7 @@ module.exports = {
             }
         ]
     },
-    devtool: "source-map",
+    //devtool: "source-map",
     devServer: {
         historyApiFallback: true,
         contentBase: path.join(__dirname, 'dist'),

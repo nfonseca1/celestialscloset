@@ -17,23 +17,22 @@ interface State {
 }
 
 export default class Listing extends React.Component<Props, State>  {
-    startImage: string = `url(${this.props.data.photos[0].link})`;
     startImagePos = {
         x: this.props.data.photos[0]?.crop?.x || 0,
         y: this.props.data.photos[0]?.crop?.y || 0
     }
 
-    //imageFlipInterval: NodeJS.Timeout = null;
-    //currentImageIdx = 0;
-
     constructor(props: Props) {
         super(props)
+
+        let pieces = this.props.data.photos[0].link.split("/photos");
+        let imageString = `url(${pieces[0]}/photos/compressed${pieces[1]})`;
 
         this.state = {
             imageStyle: '',
             listingStyle: '',
             style: {
-                backgroundImage: this.startImage,
+                backgroundImage: imageString,
                 backgroundPosition: `${this.startImagePos.x}% ${this.startImagePos.y}%`
             }
         }
@@ -44,41 +43,15 @@ export default class Listing extends React.Component<Props, State>  {
     activate() {
         this.setState((state) => ({
             imageStyle: 'expandImage',
-            listingStyle: 'expandListing',
-            style: {
-                backgroundImage: state.style.backgroundImage,
-                backgroundPosition: state.style.backgroundPosition
-            }
-        }), () => {
-            //this.imageFlipInterval = setInterval(() => {
-            //    if (this.props.data.photos[this.currentImageIdx + 1]) {
-            //        this.currentImageIdx++;
-            //    }
-            //    else {
-            //        this.currentImageIdx = 0;
-            //    }
-
-            //    this.setState((state, props) => ({
-            //        style: {
-            //            backgroundImage: `url(${props.data.photos[this.currentImageIdx].link})`,
-            //            backgroundPosition: state.style.backgroundPosition
-            //        }
-            //    }))
-            //}, 750)
-        })
+            listingStyle: 'expandListing'
+        }))
     }
 
     deactivate() {
-        //clearInterval(this.imageFlipInterval);
-        //this.currentImageIdx = 0;
 
         this.setState((state) => ({
             imageStyle: 'shrinkImage',
-            listingStyle: 'shrinkListing',
-            style: {
-                backgroundImage: this.startImage,
-                backgroundPosition: state.style.backgroundPosition
-            }
+            listingStyle: 'shrinkListing'
         }))
     }
 
@@ -88,9 +61,9 @@ export default class Listing extends React.Component<Props, State>  {
             <div className="Listing-Container">
                 <div className={`Listing ${this.state.listingStyle}`}>
                     <div className="header">
-                        <div className="title">
+                        <h2 className="title">
                             {this.props.data.title}
-                        </div>
+                        </h2>
                         <div className="price">
                             ${this.props.data.price}
                         </div>

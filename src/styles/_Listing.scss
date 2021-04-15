@@ -35,13 +35,18 @@ $mobileHeight: 60vw;
 
         @media screen and (orientation: portrait) {
             height: 9vw;
-            font-size: 3vw;
             padding: 0 1vw 1.4vw 1vw;
         }
 
-        div {
+        * {
             display: inline-flex;
             flex-direction: column-reverse;
+            font-size: 2.15vh;
+            font-weight: normal;
+
+            @media screen and (orientation: portrait) {
+                font-size: 3vw;
+            }
         }
     }
 

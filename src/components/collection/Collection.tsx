@@ -14,7 +14,7 @@ export default class Collection extends React.Component<{}, State> {
         this.state = { listings: cache.getCache() }
 
         if ((cache.getCache()?.length > 0) == false && !cache.isPolling()) {
-            getAllListings(true)
+            getAllListings(false)
                 .then(listingsData => {
                     this.setState({
                         listings: listingsData || []
@@ -42,7 +42,6 @@ export default class Collection extends React.Component<{}, State> {
         if (Date.now() < cache.getPollBuffer() || cache.isPolling()) return;
         getAllListings(true)
             .then(listingsData => {
-                console.log(entries);
                 this.setState((state) => ({
                     listings: listingsData ? [...state.listings, ...listingsData] : state.listings
                 }), () => {
@@ -65,7 +64,7 @@ export default class Collection extends React.Component<{}, State> {
         return (
             <div className="Collection">
                 <div className="listings-section">
-                    <h3>Crystal Collection 💎</h3>
+                    <h1>Crystal Collection 💎</h1>
                     <div className="listings">
                         {listingsJSX}
                     </div>

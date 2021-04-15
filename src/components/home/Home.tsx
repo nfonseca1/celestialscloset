@@ -42,7 +42,7 @@ export default class Home extends React.Component<{}, State> {
                     <div></div>
                 </div>
                 <div className="listings-section">
-                    <h3>Recent Releases 💎</h3>
+                    <h1>Recent Releases 💎</h1>
                     <div className="listings">
                         {listingsJSX}
                     </div>

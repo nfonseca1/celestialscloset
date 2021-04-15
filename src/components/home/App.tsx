@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import Helmet from 'react-helmet';
 import Navbar from "../Navbar";
 import Home from "./Home";
 import Product from "../Product";
@@ -31,6 +32,9 @@ export default class App extends React.Component<{}, { photo: JSX.Element }> {
     render() {
         return (
             <div className="App">
+                <Helmet>
+                    <meta name="description" content="Handmade, wire wrapped jewelry made with elegant crystals and unique charms."></meta>
+                </Helmet>
                 <Router>
                     <Switch>
                         <Route exact path="/">

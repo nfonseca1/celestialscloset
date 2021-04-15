@@ -2,6 +2,7 @@ import * as React from 'react';
 import { Link } from 'react-router-dom';
 import { match } from 'react-router';
 import { History, Location } from 'history';
+import Helmet from 'react-helmet';
 import { IProduct, getProductById } from '../lib/database';
 
 interface Props {
@@ -14,15 +15,14 @@ interface Props {
 
 interface State {
     photoIdx: number,
-    data: IProduct,
-    photo: JSX.Element
+    data: IProduct
 }
 
 export default class Product extends React.Component<Props, State> {
     constructor(props: Props) {
         super(props);
 
-        this.state = { data: null, photo: null, photoIdx: 0 }
+        this.state = { data: null, photoIdx: 0 }
 
         const id = this.props.match.params.id;
         getProductById(id)
@@ -56,10 +56,6 @@ export default class Product extends React.Component<Props, State> {
     render() {
         document.body.style.overflowY = 'hidden';
 
-        let style = {
-            backgroundImage: `url(${this.state.data?.photos[this.state.photoIdx]?.link || ''})`
-        }
-
         let stonesJSX = this.state.data?.details.stones?.map(s => {
             return <div className="list-item" key={s.stone}>{s.stone}</div>
         })
@@ -85,42 +81,89 @@ export default class Product extends React.Component<Props, State> {
             )
         }
 
-        let arrowDisplay = this.state.data?.photos?.length > 1 ? { display: 'inline-block' } : { display: 'none' }
+        let arrowDisplay = this.state.data?.photos?.length > 1 ? { display: 'inline-block' } : { display: 'none' };
+
+        let stones: JSX.Element | null = (
+            <div className="detail">
+                <div className="title">Stones</div>
+                {stonesJSX}
+            </div>
+        )
+
+        let chakras: JSX.Element | null = (
+            <div className="detail">
+                <div className="title">Chakras</div>
+                {chakrasJSX}
+            </div>
+        )
+
+        let benefits: JSX.Element | null = (
+            <div className="detail">
+                <div className="title">Benefits</div>
+                {benefitsJSX}
+            </div>
+        )
+
+        if (this.state.data?.options?.hideStones) stones = null;
+        if (this.state.data?.options?.hideChakras) chakras = null;
+        if (this.state.data?.options?.hideBenefits) benefits = null;
+
+        let data = this.state.data;
+        let alt = 'Handmade wire wrapped jewelry piece';
+        let img: JSX.Element | null = null;
+
+        if (data) {
+            alt = `Handmade wire wrapped ${data.details?.stones?.[0]?.stone} jewelry piece`;
+            if (data.details?.stones?.length > 1) {
+                alt += ` with `;
+
+                for (let i = 1; i < data.details.stones.length; i++) {
+                    alt += i === 1 ? `${data.details.stones[i]?.stone}` : `, ${data.details.stones[i]?.stone}`;
+                }
+            }
+            let styles: React.CSSProperties = {
+                height: '100%',
+                width: '100%',
+                objectFit: 'contain'
+            }
+            img = <img src={`${data?.photos[this.state.photoIdx]?.link || ''}`} alt={alt} style={styles} />;
+        }
+
+        let title: JSX.Element | null = null;
+        if (data?.title) title = <title>{`${data.title} | Celestials Closet`}</title>;
+
+        let description: JSX.Element | null = null;
+        if (data?.description) description = <meta name="description" content={data.description} />
 
         return (
             <div className="Product-Container">
+                <Helmet>
+                    {title}
+                    {description}
+                </Helmet>
                 {backJSX}
                 <div className="Product">
-                    <div className="photo" style={style}>
-                        <div className="photo-collider" onClick={() => this.props.showFullPhoto(this.state.data?.photos[this.state.photoIdx].link)}></div>
+                    <div className="photo">
+                        {img}
+                        <div className="photo-collider" onClick={() => this.props.showFullPhoto(data?.photos[this.state.photoIdx].link)}></div>
                         <div className="arrow left" onClick={() => this.togglePhoto(-1)} style={arrowDisplay}></div>
                         <div className="arrow right" onClick={() => this.togglePhoto(1)} style={arrowDisplay}></div>
                     </div>
                     <div className="info">
                         <div className="product-header">
-                            <div>{this.state.data?.title}</div>
-                            <div>${this.state.data?.price}</div>
+                            <div>{data?.title}</div>
+                            <div>${data?.price}</div>
                         </div>
                         <div className="description">
-                            {this.state.data?.description}
+                            {data?.description}
                         </div>
                         <div className="details">
-                            <div className="detail">
-                                <div className="title">Stones</div>
-                                {stonesJSX}
-                            </div>
-                            <div className="detail">
-                                <div className="title">Chakras</div>
-                                {chakrasJSX}
-                            </div>
-                            <div className="detail">
-                                <div className="title">Benefits</div>
-                                {benefitsJSX}
-                            </div>
+                            {stones}
+                            {chakras}
+                            {benefits}
                         </div>
                     </div>
                 </div>
-                {this.state.photo}
             </div>
         )
     }

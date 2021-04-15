@@ -2,6 +2,7 @@ import { Credentials, S3, DynamoDB } from 'aws-sdk';
 import { stringify, v4 as uuidv4 } from 'uuid';
 import bcrypt from 'bcrypt';
 import dotenv from 'dotenv';
+import sharp from 'sharp';
 import { IProduct, IUser, IComment, IProductInfoList } from './schemas';
 
 dotenv.config();
@@ -118,6 +119,30 @@ database.uploadPhoto = (photo: Buffer, name: string) => {
             console.log(`Successfully uploaded photo ${name}`);
         })
         .catch(e => console.error(`Could not upload photo ${name} \n`, e));
+
+
+    sharp(photo)
+        .resize(540, 675, {
+            fit: 'cover'
+        })
+        .jpeg({
+            mozjpeg: true
+        })
+        .toBuffer()
+        .then(data => {
+            let params = {
+                Bucket: process.env.BUCKET,
+                Key: `photos/compressed/${name}`,
+                Body: data,
+                ACL: 'public-read'
+            }
+            s3.putObject(params).promise()
+                .then(data => {
+                    console.log(`Successfully uploaded compressed photo ${name}`);
+                })
+                .catch(e => console.error(`Could not upload compressed photo ${name} \n`, e));
+        })
+        .catch(e => console.error(`could not compress photo ${name} \n`, e))
 }
 
 database.getLists = (): Promise<any> => {
