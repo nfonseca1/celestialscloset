@@ -5,6 +5,7 @@ import memorystore from 'memorystore';
 import multer from 'multer';
 import { v4 as uuidv4 } from 'uuid';
 import bcrypt from 'bcrypt';
+import expressStaticGzip from 'express-static-gzip';
 import { IProduct, IRequest, IProductInfoList } from "./lib/schemas";
 import database from './lib/database';
 import { validateName, validatePassword, validateUsername, validateNewListItem } from './lib/validation';
@@ -13,8 +14,12 @@ const app: Application = express();
 app.use(express.json({ limit: '100mb' }));
 app.use(express.urlencoded({ extended: true, limit: '100mb' }));
 app.use(favicon(__dirname + "/favicon.png"));
-app.use(express.static(__dirname + "/dist/"));
 
+app.use(expressStaticGzip(__dirname + "/dist/", {
+    enableBrotli: true,
+    index: false,
+    orderPreference: ['br', 'gz']
+}));
 
 let upload = multer();
 

@@ -1,5 +1,6 @@
 const path = require("path");
 const HTMLWebpackPlugin = require("html-webpack-plugin");
+const CompressionPlugin = require("compression-webpack-plugin");
 
 module.exports = {
     mode: "production",
@@ -93,6 +94,11 @@ module.exports = {
             template: 'index.html',
             filename: 'admin.html',
             chunks: ['dashboard']
+        }),
+        new CompressionPlugin(),
+        new CompressionPlugin({
+            filename: "[path][base].br",
+            algorithm: "brotliCompress"
         })
     ]
 }

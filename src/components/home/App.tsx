@@ -4,8 +4,8 @@ import Helmet from 'react-helmet';
 import Navbar from "../Navbar";
 import Home from "./Home";
 import Photo from "../Photo";
-const Product = React.lazy(() => import("../Product"));
-const Instagram = React.lazy(() => import("../Instagram"));
+const Product = React.lazy(() => import(/* webpackChunkName: "product" */ "../Product"));
+const Instagram = React.lazy(() => import(/* webpackChunkName: "instagram" */ "../Instagram"));
 
 export default class App extends React.Component<{}, { photo: JSX.Element }> {
     constructor(props: {}) {
