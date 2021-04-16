@@ -4,6 +4,7 @@ import { match } from 'react-router';
 import { History, Location } from 'history';
 import Helmet from 'react-helmet';
 import { IProduct, getProductById } from '../lib/database';
+import cache from '../lib/cache';
 
 interface Props {
     match: match<{ id: string }>,
@@ -126,7 +127,10 @@ export default class Product extends React.Component<Props, State> {
                 width: '100%',
                 objectFit: 'contain'
             }
-            img = <img src={`${data?.photos[this.state.photoIdx]?.link || ''}`} alt={alt} style={styles} />;
+            let pieces = data?.photos[this.state.photoIdx]?.link.split("/photos");
+            let s3Path = `${pieces[0]}/photos`;
+            let cdn = cache.getCDN();
+            img = <img src={`${cdn || s3Path}${pieces[1]}`} alt={alt} style={styles} />;
         }
 
         let title: JSX.Element | null = null;

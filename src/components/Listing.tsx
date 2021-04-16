@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { Link } from 'react-router-dom';
-import { IListing } from '../lib/database'
+import { IListing } from '../lib/database';
+import cache from '../lib/cache';
 
 interface Props {
     data: IListing
@@ -26,7 +27,9 @@ export default class Listing extends React.Component<Props, State>  {
         super(props)
 
         let pieces = this.props.data.photos[0].link.split("/photos");
-        let imageString = `url(${pieces[0]}/photos/compressed${pieces[1]})`;
+        let s3Path = `${pieces[0]}/photos`;
+        let cdn = cache.getCDN();
+        let imageString = `url(${cdn || s3Path}/compressed${pieces[1]})`;
 
         this.state = {
             imageStyle: '',

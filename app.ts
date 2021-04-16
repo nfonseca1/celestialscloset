@@ -69,7 +69,7 @@ app.get("/api/allproducts", (req: IRequest, res) => {
         pKey = JSON.parse(req.query.paginationKey as string);
     }
     else if (req.query.paginationKey === 'undefined') {
-        res.send({ listings: [], paginationKey: undefined });
+        res.send({ listings: [], paginationKey: undefined, CDN: process.env.CLOUDFRONT_DOMAIN });
         return;
     }
 
@@ -86,7 +86,7 @@ app.get("/api/allproducts", (req: IRequest, res) => {
             })
             let paginationKey = data.LastEvaluatedKey;
 
-            res.send({ listings: data.Items, paginationKey: paginationKey });
+            res.send({ listings: data.Items, paginationKey: paginationKey, CDN: process.env.CLOUDFRONT_DOMAIN });
         })
 })
 
@@ -95,7 +95,7 @@ app.get("/api/product", (req: IRequest, res) => {
 
     database.getProductById(id)
         .then(data => {
-            res.send(data);
+            res.send({ data, CDN: process.env.CLOUDFRONT_DOMAIN });
         })
 
 })

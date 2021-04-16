@@ -1,3 +1,4 @@
+import { getCombinedNodeFlags } from 'typescript';
 import { IListing } from './database';
 
 let listingsCache: IListing[] = [
@@ -6,6 +7,7 @@ let listingsCache: IListing[] = [
 let polling = false;
 let pollBufferTime = 0;
 let paginationKey: any = null;
+let cdn: any = null;
 
 let cache = {
     getCache: () => {
@@ -34,6 +36,13 @@ let cache = {
     },
     setPaginationKey: (key: any) => {
         paginationKey = key;
+    },
+
+    getCDN: () => {
+        return cdn;
+    },
+    setCDN: (CDN: string) => {
+        cdn = CDN;
     }
 }
 

@@ -50,6 +50,7 @@ export async function getAllListings(descending: boolean = false, limit?: number
             cache.setPollBuffer(200);
 
             cache.setPaginationKey(json.paginationKey);
+            cache.setCDN(json.CDN);
 
             let data: IListing[] = json.listings;
             return data;
@@ -59,8 +60,8 @@ export async function getAllListings(descending: boolean = false, limit?: number
 export async function getProductById(id: string): Promise<IProduct> {
     let response = await fetch(`/api/product?id=${id}`);
     let json = await response.json();
-    // Parse data
-    let data: IProduct = json;
+    cache.setCDN(json.CDN);
+    let data: IProduct = json.data;
     return data;
 }
 

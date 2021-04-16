@@ -30,7 +30,7 @@ export default class Navbar extends React.Component<{ context: Context }> {
         return (
             <div className="Navbar">
                 <div className="logo-back"></div>
-                <img src="/assets/logo.png" className="logo" />
+                <img src="/assets/logo.png" className="logo" alt="Celestials Closet Logo" />
                 <div className="nav-container">
                     {homeNavJSX}
                     <div className="nav-links">
