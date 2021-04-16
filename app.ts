@@ -1,5 +1,4 @@
-import favicon from 'serve-favicon';
-import express, { Application, Request, Response } from 'express';
+import express, { Application } from 'express';
 import session from 'express-session';
 import memorystore from 'memorystore';
 import multer from 'multer';
@@ -13,7 +12,6 @@ import { validateName, validatePassword, validateUsername, validateNewListItem }
 const app: Application = express();
 app.use(express.json({ limit: '100mb' }));
 app.use(express.urlencoded({ extended: true, limit: '100mb' }));
-app.use(favicon(__dirname + "/favicon.png"));
 
 app.use(expressStaticGzip(__dirname + "/dist/", {
     enableBrotli: true,
