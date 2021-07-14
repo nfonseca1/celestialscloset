@@ -1,0 +1,93 @@
+@import "globals";
+
+.Payments {
+    .payment-options {
+        margin-top: 5vh;
+
+        .description {
+            margin-top: 1vh;
+            color: #383838;
+        }
+
+        .options {
+            padding: 0 0 0 5vw;
+            margin-top: 5vh;
+            width: 100%;
+
+            .api-key {
+                display: inline-flex;
+                width: auto;
+                margin-right: 5vw;
+
+                input {
+                    margin: 0 0 2vh .5vw;
+                    border-radius: 4px;
+                    border: 1px solid #dddddd;
+                    line-height: 2.5vh;
+                    width: 18vw;
+                }
+            }
+
+            .verify-btn {
+                padding: 1vh;
+                background-color: #327ad8;
+                color: white;
+                border-radius: 5px;
+                border: none;
+                font-size: 1.5vh;
+                cursor: pointer;
+            };
+        }
+
+        .setting {
+            display: flex;
+            justify-content: space-between;
+            height: auto;
+            min-height: 5vh;
+            width: 100%;
+            margin-top: 3vh;
+            border-bottom: 1px solid #e0e0e0;
+
+            .left {
+                display: inline-block;
+                width: 90%;
+
+                .description {
+                    font-size: 1.8vh;
+                    color: #555555;
+                    margin-top: .2vh;
+                }
+            }
+            .checkbox {
+                display: inline-flex;
+                justify-content: center;
+                flex-direction: column;
+                min-height: 4vh;
+                width: 9%;
+
+                input[type=checkbox] {
+                    margin: 0;
+                    padding: 0;
+                    width: 100%;
+                    -ms-transform: scale(1.2); /* IE */
+                    -moz-transform: scale(1.2); /* FF */
+                    -webkit-transform: scale(1.2); /* Safari and Chrome */
+                    -o-transform: scale(1.2); /* Opera */
+                    transform: scale(1.2);
+                }
+            }
+        }
+    }
+
+    .paypal {
+        margin-top: 6vh;
+    }
+
+    .link {
+        color: #327ad8;
+        cursor: pointer;
+    }
+    .link:hover {
+        color: #468ff0;
+    }
+}

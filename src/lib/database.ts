@@ -65,6 +65,39 @@ export async function getProductById(id: string): Promise<IProduct> {
     return data;
 }
 
+type PaymentSettings = {
+    stripeEnabled: null | boolean,
+    paypalEnabled: null | boolean
+}
+export async function getPaymentSettings(): Promise<PaymentSettings> {
+    return fetch("/api/paymentSettings")
+        .then(res => res.json())
+        .then((data: PaymentSettings) => {
+            cache.setPayments(data);
+            return data;
+        })
+}
+
+interface CartItem {
+    thumbnailUrl: string,
+    title: string,
+    price: number,
+    quantity: number
+}
+interface Cart {
+    [id: string]: CartItem
+}
+export function addToCart(id: string, data: CartItem) {
+    fetch('/api/cart', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ id, data })
+    })
+    cache.addToCart(id, data)
+}
+
 export function getListItems(): Promise<{ stones: string[], benefits: string[] }> {
     return fetch(`/admin/lists/`)
         .then(res => res.json())

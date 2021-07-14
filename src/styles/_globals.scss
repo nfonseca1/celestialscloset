@@ -24,3 +24,24 @@ $secondary-font: 'Courgette', cursive;
         background-color: #a7a7a7;
     }
 }
+
+.button {
+    padding: 1vh;
+    background-color: #327ad8;
+    color: white;
+    border-radius: 5px;
+    border: none;
+    font-size: 1.5vh;
+    cursor: pointer;
+};
+
+.footer {
+    width: 100%;
+    margin-top: 15vh;
+    padding-top: 1vh;
+    padding-bottom: 2vh;
+    text-align: center;
+    font-size: 1.5vh;
+    color: #707070;
+    border-top: 1px solid darken($bg-color, 5%);
+}

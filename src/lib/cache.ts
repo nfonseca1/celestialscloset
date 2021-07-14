@@ -1,13 +1,33 @@
-import { getCombinedNodeFlags } from 'typescript';
 import { IListing } from './database';
+
+interface ICartItem {
+    thumbnailUrl: string,
+    title: string,
+    price: number,
+    quantity: number
+}
 
 let listingsCache: IListing[] = [
 
 ];
+let cart: {
+    [id: string]: ICartItem
+} = {
+
+};
 let polling = false;
 let pollBufferTime = 0;
 let paginationKey: any = null;
 let cdn: any = null;
+
+type PaymentSettings = {
+    stripeEnabled: null | boolean,
+    paypalEnabled: null | boolean
+}
+let payments: PaymentSettings = {
+    stripeEnabled: null,
+    paypalEnabled: null
+}
 
 let cache = {
     getCache: () => {
@@ -19,7 +39,15 @@ let cache = {
     addToCache: (data?: IListing[]) => {
         if (data) listingsCache.push(...data);
     },
-
+    getCart: () => {
+        return cart;
+    },
+    addToCart: (id: string, data: ICartItem) => {
+        cart[id] = data;
+    },
+    removeFromCart: (id: string) => {
+        delete cart[id];
+    },
     getPollBuffer: () => {
         return pollBufferTime;
     },
@@ -43,6 +71,13 @@ let cache = {
     },
     setCDN: (CDN: string) => {
         cdn = CDN;
+    },
+
+    getPayments: () => {
+        return payments;
+    },
+    setPayments: (paymentSettings: PaymentSettings) => {
+        payments = paymentSettings
     }
 }
 

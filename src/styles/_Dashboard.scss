@@ -1,9 +1,6 @@
 @import 'globals';
 
 .Dashboard {
-    min-height: 80vh;
-    width: 100%;
-    padding: 10vh 10%;
 
     @media screen and (orientation: portrait) {
         width: 100vw;

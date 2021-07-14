@@ -80,15 +80,4 @@
         color: lighten($title-color, 5%);
         transition: font-size .1s, color .1s;
     }
-
-    .footer {
-        width: 100%;
-        margin-top: 15vh;
-        padding-top: 1vh;
-        padding-bottom: 2vh;
-        text-align: center;
-        font-size: 1.5vh;
-        color: #707070;
-        border-top: 1px solid darken($bg-color, 5%);
-    }
 }

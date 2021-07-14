@@ -19,6 +19,7 @@ module.exports = {
     resolve: {
         extensions: [".ts", ".tsx", ".js", ".jsx", ".scss"]
     },
+    //target: "es5",
     module: {
         rules: [
             {
@@ -91,7 +92,7 @@ module.exports = {
         }),
         new HTMLWebpackPlugin({
             inject: 'body',
-            template: 'index.html',
+            template: 'admin.html',
             filename: 'admin.html',
             chunks: ['dashboard']
         }),

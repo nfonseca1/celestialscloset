@@ -49,6 +49,14 @@ app.get("/collection", (req, res) => {
     res.sendFile(__dirname + "/dist/collection.html");
 })
 
+app.get("/instagram", (req, res) => {
+    res.sendFile(__dirname + "/dist/collection.html");
+})
+
+app.get("/cart", (req, res) => {
+    res.sendFile(__dirname + "/dist/collection.html");
+})
+
 app.get("/api/allproducts", (req: IRequest, res) => {
     // Query params
     let descending = req.query.descending == 'true';
@@ -96,6 +104,19 @@ app.get("/api/product", (req: IRequest, res) => {
             res.send({ data, CDN: process.env.CLOUDFRONT_DOMAIN });
         })
 
+})
+
+app.get("/api/paymentSettings", (req, res) => {
+    database.getPaymentSettings()
+        .then(settings => {
+            res.send(settings);
+        })
+})
+
+app.post("/api/cart", (req: IRequest, res) => {
+    if (!req.session.cart) req.session.cart = {};
+    req.session.cart[req.body.id] = req.body.data;
+    req.session.save();
 })
 
 app.get("/admin/home", (req: IRequest, res) => {
@@ -198,6 +219,15 @@ app.get("/admin/lists", (req, res) => {
                 }
                 res.send({ stones: lists.stones, benefits: lists.benefits })
             })
+    }
+})
+
+app.get("/admin/payments", (req: IRequest, res) => {
+    if (!req.session.user) {
+        res.redirect("/admin");
+    }
+    else {
+        res.sendFile(__dirname + "/dist/admin.html");
     }
 })
 

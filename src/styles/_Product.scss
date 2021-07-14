@@ -141,8 +141,11 @@
     }
     
     .product-header {
+        position: relative;
         display: flex;
         justify-content: space-between;
+        min-height: 5vh;
+        flex-wrap: wrap;
         width: 100%;
         font-family: $main-font;
         font-size: 3vh;
@@ -152,7 +155,22 @@
         }
 
         div {
-            display: inline-block;
+            vertical-align: top;
+        }
+
+        .price-container {
+            width: 18%;
+            display: inline-flex;
+            justify-content: space-between;
+        }
+
+        button {
+            margin-top: auto;
+            margin-bottom: auto;
+        }
+
+        .clicked {
+            background-color: #3f3f3f;
         }
     }
 

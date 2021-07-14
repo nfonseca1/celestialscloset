@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { match } from 'react-router';
 import { History, Location } from 'history';
 import Helmet from 'react-helmet';
-import { IProduct, getProductById } from '../lib/database';
+import { IProduct, getProductById, getPaymentSettings, addToCart } from '../lib/database';
 import cache from '../lib/cache';
 
 interface Props {
@@ -16,23 +16,52 @@ interface Props {
 
 interface State {
     photoIdx: number,
-    data: IProduct
+    data: IProduct,
+    cartEnabled: boolean,
+    addedToCart: boolean
 }
 
 export default class Product extends React.Component<Props, State> {
     constructor(props: Props) {
         super(props);
 
-        this.state = { data: null, photoIdx: 0 }
+        let stripe = cache.getPayments().stripeEnabled;
+        let paypal = cache.getPayments().paypalEnabled;
+
+        if (stripe || paypal) {
+            this.state = { data: null, photoIdx: 0, cartEnabled: true, addedToCart: false }
+        }
+        else if (stripe === null || paypal === null) {
+            this.state = { data: null, photoIdx: 0, cartEnabled: false, addedToCart: false }
+
+            getPaymentSettings()
+                .then(settings => {
+                    let cartEnabled = false;
+                    if (settings.stripeEnabled || settings.paypalEnabled) cartEnabled = true;
+                    this.setState({
+                        cartEnabled: cartEnabled
+                    })
+                })
+        }
+        else {
+            this.state = { data: null, photoIdx: 0, cartEnabled: false, addedToCart: false }
+        }
 
         const id = this.props.match.params.id;
         getProductById(id)
             .then(product => {
+                let cdn = cache.getCDN();
+                product.photos.map(p => {
+                    let pieces = p.link.split("/photos");
+                    let s3Path = `${pieces[0]}/photos`;
+                    return `${cdn || s3Path}/compressed${pieces[1]}`;
+                })
                 this.setState({ data: product })
             })
             .catch(e => console.error(`Could not get product with id ${id} \n`, e))
 
         this.togglePhoto = this.togglePhoto.bind(this);
+        this.addToCart = this.addToCart.bind(this);
     }
 
     togglePhoto(dir: number = 1) {
@@ -52,6 +81,19 @@ export default class Product extends React.Component<Props, State> {
                 photoIdx: 0
             })
         }
+    }
+
+    addToCart() {
+        let data = this.state.data;
+        addToCart(data.id, {
+            thumbnailUrl: data.photos[0].link,
+            title: data.title,
+            price: data.price,
+            quantity: 1
+        })
+        this.setState({
+            addedToCart: true
+        })
     }
 
     render() {
@@ -139,11 +181,36 @@ export default class Product extends React.Component<Props, State> {
         let description: JSX.Element | null = null;
         if (data?.description) description = <meta name="description" content={data.description} />
 
+        let preload: JSX.Element[] = [];
+        let cdn = cache.getCDN();
+        for (let img of data?.photos || []) {
+            let pieces = img.link.split("/photos");
+            let s3Path = `${pieces[0]}/photos`;
+            preload.push(
+                <link rel="preload" href={`${cdn || s3Path}${pieces[1]}`} as="image" />
+            )
+        }
+
+        let priceInfo = <div className="price">${data?.price}</div>
+        if (this.state.cartEnabled) {
+            let cartBtn = <button className="button" onClick={this.addToCart}>Add to cart</button>
+            if (this.state.addedToCart) {
+                cartBtn = <button className="button clicked" onClick={this.addToCart} disabled>Added to cart</button>
+            }
+            priceInfo = (
+                <div className="price-container">
+                    <div className="price">${data?.price}</div>
+                    {cartBtn}
+                </div>
+            )
+        }
+
         return (
             <div className="Product-Container">
                 <Helmet>
                     {title}
                     {description}
+                    {preload}
                 </Helmet>
                 {backJSX}
                 <div className="Product">
@@ -156,7 +223,7 @@ export default class Product extends React.Component<Props, State> {
                     <div className="info">
                         <div className="product-header">
                             <div>{data?.title}</div>
-                            <div>${data?.price}</div>
+                            {priceInfo}
                         </div>
                         <div className="description">
                             {data?.description}

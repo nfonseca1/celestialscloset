@@ -6,6 +6,7 @@ import Collection from "./Collection";
 import Photo from "../Photo";
 const Product = React.lazy(() => import(/* webpackChunkName: "product" */ "../Product"));
 const Instagram = React.lazy(() => import(/* webpackChunkName: "instagram" */ "../Instagram"));
+const Cart = React.lazy(() => import(/* webpackChunkName: "cart" */ "../Cart"));
 
 export default class App extends React.Component<{}, { photo: JSX.Element }> {
     constructor(props: {}) {
@@ -61,6 +62,13 @@ export default class App extends React.Component<{}, { photo: JSX.Element }> {
                             <Collection />
                             <React.Suspense fallback={<div>Loading...</div>}>
                                 <Instagram context={'Collection'} />
+                            </React.Suspense>
+                        </Route>
+                        <Route path="/cart">
+                            <Navbar context={'Home'} />
+                            <Collection />
+                            <React.Suspense fallback={<div>Loading...</div>}>
+                                <Cart />
                             </React.Suspense>
                         </Route>
                     </Switch>

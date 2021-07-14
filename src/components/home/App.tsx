@@ -6,6 +6,7 @@ import Home from "./Home";
 import Photo from "../Photo";
 const Product = React.lazy(() => import(/* webpackChunkName: "product" */ "../Product"));
 const Instagram = React.lazy(() => import(/* webpackChunkName: "instagram" */ "../Instagram"));
+const Cart = React.lazy(() => import(/* webpackChunkName: "cart" */ "../Cart"));
 
 export default class App extends React.Component<{}, { photo: JSX.Element }> {
     constructor(props: {}) {
@@ -40,6 +41,9 @@ export default class App extends React.Component<{}, { photo: JSX.Element }> {
                         <Route exact path="/">
                             <Navbar context={'Home'} />
                             <Home />
+                            <Helmet>
+                                <title>Celestials Closet Jewelry</title>
+                            </Helmet>
                         </Route>
                         <Route
                             path="/p/:id"
@@ -58,6 +62,13 @@ export default class App extends React.Component<{}, { photo: JSX.Element }> {
                             <Home />
                             <React.Suspense fallback={<div>Loading...</div>}>
                                 <Instagram context={'Home'} />
+                            </React.Suspense>
+                        </Route>
+                        <Route path="/cart">
+                            <Navbar context={'Home'} />
+                            <Home />
+                            <React.Suspense fallback={<div>Loading...</div>}>
+                                <Cart />
                             </React.Suspense>
                         </Route>
                     </Switch>

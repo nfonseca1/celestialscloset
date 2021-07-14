@@ -1,0 +1,22 @@
+@import 'globals';
+
+.Cart-Background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vw;
+    background-color: rgba(0,0,0,.6);
+    z-index: 2100;
+}
+
+.Cart {
+    position: fixed;
+    top: 2vh;
+    left: 20vw;
+    width: 60vw;
+    height: 96vh;
+    background-color: $bg-color;
+    z-index: 2200;
+    @extend %scroll;
+}
